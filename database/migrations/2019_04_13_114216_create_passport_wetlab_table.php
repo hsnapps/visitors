@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCoursePassportTable extends Migration
+class CreatePassportWetlabTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateCoursePassportTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_passport', function (Blueprint $table) {
-            $table->unsignedInteger('course_id');
+        Schema::create('passport_wetlab', function (Blueprint $table) {
+            $table->unsignedInteger('wetlab_id');
             $table->unsignedInteger('passport_id');
             $table->boolean('paid')->default(0);
             $table->boolean('cancelled_by_visitor')->default(0);
             $table->boolean('cancelled_by_provider')->default(0);
             $table->boolean('attended')->default(0);
 
-            // $table->foreign('course_id')->references('id')->on('courses');
+            // $table->foreign('wetlab_id')->references('id')->on('wetlabs');
             // $table->foreign('passport_id')->references('id')->on('passports');
         });
     }
@@ -33,6 +33,6 @@ class CreateCoursePassportTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_passport');
+        Schema::dropIfExists('passport_wetlab');
     }
 }

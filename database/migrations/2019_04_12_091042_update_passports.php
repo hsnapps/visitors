@@ -14,7 +14,7 @@ class UpdatePassports extends Migration
     public function up()
     {
         Schema::table('passports', function (Blueprint $table) {
-            $table->string('password');
+            $table->string('password')->default(bcrypt('1234'));
             $table->rememberToken();
         });
     }
