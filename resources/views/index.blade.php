@@ -1,5 +1,25 @@
 @extends('layouts.main')
 
+@push('styles')
+<style>
+    .float{
+        position:fixed;
+        width:60px;
+        height:60px;
+        bottom:40px;
+        right:40px;
+        background-color:#0C9;
+        color:#FFF;
+        border-radius:50px;
+        text-align:center;
+        box-shadow: 2px 2px 3px #999;
+    }
+    .float:hover{color:#d0e0d4;}
+    .floating-btn{margin-top: 15px;}
+    .floating-btn:hover {color:#d0e0d4;}
+</style>
+@endpush
+
 @section('content')
 <!-- row -->
 <div class="row">
@@ -74,10 +94,17 @@
         </div>
     </div>
 </div>
+
+@if ($cart_count > 0)
+    <a href="{{ route('cart') }}" class="float" title="Got to cart"><i class="fa fa-2x fa-shopping-cart floating-btn"></i><span class="badge">{{ $cart_count }}</span></a>
+@endif
 <!-- row -->
 
-@include('modals.profile_edit')
-@include('modals.course_adding')
-@include('modals.wetlab_adding')
+    @include('modals.profile_edit')
+    @include('modals.course_adding')
+    @include('modals.wetlab_adding')
+
 @endsection
 
+@push('scripts')
+@endpush

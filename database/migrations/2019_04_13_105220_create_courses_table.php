@@ -19,7 +19,7 @@ class CreateCoursesTable extends Migration
             $table->integer('seats')->default(50);
             $table->date('starts_on');
             $table->integer('days')->default(1)->comment('Course duration in days');
-            $table->decimal('price')->default(1000.00);
+            $table->decimal('price', 8, 2)->default(1000.00);
             $table->softDeletes();
             $table->timestamps();
         });

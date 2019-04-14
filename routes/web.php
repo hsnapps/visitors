@@ -14,4 +14,7 @@
 Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::post('profile-update', 'HomeController@updateProfile')->name('profile.update');
+Route::post('/profile-update', 'HomeController@updateProfile')->name('profile.update');
+Route::post('/add-course-to-cart', 'HomeController@addCourseToCart')->name('add-course-to-cart');
+Route::view('/cart', 'cart')->name('cart');
+Route::post('/remove-course-from-cart', 'HomeController@removeCourseFromCart')->name('remove-course-from-cart');

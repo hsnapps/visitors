@@ -16,6 +16,10 @@ class Cart extends Model
         'item_type',
         'item_id',
         'expiration_date',
+        'title',
+        'starts_on',
+        'price',
+        'days'
     ];
 
     /**
@@ -25,6 +29,7 @@ class Cart extends Model
      */
     protected $dates = [
         'expiration_date',
+        'starts_on',
     ];
 
     /**

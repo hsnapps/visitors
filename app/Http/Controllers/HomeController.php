@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Course;
 use App\WetLab;
+use App\Cart;
 
 class HomeController extends Controller
 {
@@ -96,5 +97,31 @@ class HomeController extends Controller
         }
 
         return back()->with('error', 'Profile not updated!');
+    }
+
+    public function addCourseToCart(Request $request)
+    {
+        foreach ($request->courses as $item) {
+            $course = Course::findOrFail($item);
+
+            Cart::create([
+                'passport_id' => $request->user()->id,
+                'item_type' => $request->item_type,
+                'item_id' => $course->id,
+                'expiration_date' => today()->addHours(env('EXPIRATION_DATE', 48)),
+                'title' => $course->name,
+                'starts_on' => $course->starts_on,
+                'price' => $course->price,
+                'days' => $course->days,
+            ]);   
+        }
+
+        return back()->with('status', title_case($request->item_type).' added to the cart');
+    }
+
+    public function removeCourseFromCart(Request $request)
+    {
+        Cart::destroy($request->id);
+        return back();
     }
 }

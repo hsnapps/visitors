@@ -71,8 +71,8 @@
 	<script src="{{ url('js/custom.js') }}"></script>
 	<script src="{{ url('js/aos.js') }}"></script>
     
-	<script type="text/javascript" src="js/simple-lightbox.js') }}"></script>
-    <script type="text/javascript" src="js/app.js') }}"></script>
+	<script type="text/javascript" src="{{ url('js/simple-lightbox.js') }}"></script>
+    <script type="text/javascript" src="{{ url('js/app.js') }}"></script>
 
 
 <script src="{{ url('js/jquery-ui.js') }}"></script>
@@ -90,6 +90,8 @@
             selectAll: true
         });
     });
+
+	$('[title]').tooltip();
 
 	window.setTimeout(function(){
 		$('.alert-dismissible').hide(400);

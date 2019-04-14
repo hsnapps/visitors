@@ -5,7 +5,7 @@
             <button type="button" class="speaker-modal-close" data-dismiss="modal"></button>
             <div class="modal-body">
                 <div class="row">
-                    <form>
+                    <form action="{{ route('add-course-to-cart') }}" method="POST">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="course-title">Course Title</label>
@@ -19,7 +19,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="course-category">Choose Course Category</label>
-                                <select name="basic[]" multiple="multiple" class="2col active">
+                                <select name="courses[]" multiple="multiple" class="2col active">
                                     @foreach ($courses_list as $course)
                                     <option value="{{ $course->id }}">{{ $course->name }}</option>    
                                     @endforeach
@@ -29,6 +29,8 @@
                         <div class="form-row col-md-12">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
+                        {{ csrf_field() }}
+                        <input type="hidden" name="item_type" value="courses">
                     </form>
                 </div>
             </div>
