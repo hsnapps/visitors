@@ -19,7 +19,7 @@ class WetLab extends Model
         'seats',
         'starts_on',
         'days',
-        'fees',
+        'price',
      ];
 
      /**

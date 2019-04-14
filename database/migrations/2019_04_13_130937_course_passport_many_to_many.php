@@ -30,7 +30,8 @@ class CoursePassportManyToMany extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::table('course_passport', function (Blueprint $table) {
-            $table->dropForeign(['course_id', 'passport_id']);
+            $table->dropForeign('course_passport_course_id_foreign');
+            $table->dropForeign('course_passport_passport_id_foreign');
         });
         Schema::enableForeignKeyConstraints();
     }
