@@ -56,6 +56,15 @@ class Passport extends Authenticatable
         return sprintf('%s %s', $this->first_name, $this->last_name);
     }
 
+    public function avatar()
+    {
+        $path = storage_path('app/public/avatars/'.$this->id.'.png');
+        if(file_exists($path)) {
+            return url('storage/avatars/'.$this->id.'.png');
+        }
+        return url('storage/avatars/empty.png');
+    }
+
     /**
      * The courses that belong to the user.
      */
@@ -69,6 +78,14 @@ class Passport extends Authenticatable
      */
      public function wetlabs()
      {
-         return $this->belongsToMany(WetLab::class);
+         return $this->belongsToMany(WetLab::class, 'passport_wetlab', 'passport_id', 'wetlab_id');
      }
+
+     /**
+     * Get the comments for the blog post.
+     */
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

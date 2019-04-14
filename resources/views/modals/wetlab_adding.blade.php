@@ -17,13 +17,9 @@
                             <div class="form-group col-md-12">
                                 <label for="course-category">Choose Wetlab Category</label>
                                 <select name="basic[]" multiple="multiple" class="2col active">
-                                    <option value="course-a">Wetlab A</option>
-                                    <option value="course-b">Wetlab B</option>
-                                    <option value="course-c">Wetlab C</option>
-                                    <option value="course-d">Wetlab D</option>
-                                    <option value="course-e">Wetlab E</option>
-                                    <option value="course-f">Wetlab F</option>
-                                                        
+                                    @foreach ($wetlabs_list as $wetlab)
+                                    <option value="{{ $wetlab->id }}">{{ $wetlab->name }}</option>    
+                                    @endforeach                                                        
                                 </select>
                             </div>
 

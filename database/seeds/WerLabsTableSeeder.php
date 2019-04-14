@@ -15,7 +15,7 @@ class WerLabsTableSeeder extends Seeder
     {
         $faker = Factory::create();
 
-        for ($i=ord('A'); $i < ord('H'); $i++) { 
+        for ($i=ord('A'); $i < ord('I'); $i++) { 
             WetLab::create([
                 'name' => 'WetLab '.chr($i),
                 'seats' => rand(200, 2000),

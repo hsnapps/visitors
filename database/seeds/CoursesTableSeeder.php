@@ -15,7 +15,7 @@ class CoursesTableSeeder extends Seeder
     {
         $faker = Factory::create();
 
-        for ($i=ord('A'); $i < ord('H'); $i++) { 
+        for ($i=ord('A'); $i < ord('I'); $i++) { 
             Course::create([
                 'name' => 'Course '.chr($i),
                 'seats' => rand(200, 2000),

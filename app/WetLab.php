@@ -30,4 +30,12 @@ class WetLab extends Model
     protected $dates = [
         'starts_on',
     ];
+
+    /**
+     * The visitors that belong to the course.
+     */
+    public function visitors()
+    {
+        return $this->belongsToMany(Passport::class, 'passport_wetlab', 'wetlab_id', 'passport_id');
+    }
 }
