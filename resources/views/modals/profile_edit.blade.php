@@ -6,6 +6,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                            {{ csrf_field() }}
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="first_name">First Name</label>
@@ -13,7 +14,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="middle_name">Middle Name</label>
-                                    <input type="text" class="form-control" name="middle_name" placeholder="Your Middle Name" value="{{ $user->middle_name }}" required>
+                                    <input type="text" class="form-control" name="middle_name" placeholder="Your Middle Name" value="{{ $user->middle_name }}">
                                 </div>
     
                                 <div class="form-group col-md-4">

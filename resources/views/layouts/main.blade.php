@@ -48,6 +48,9 @@
 	<div id="dashboard-page" class="section container">
 		<!-- Dashboard container -->
 		<div class="container" >
+			@includeWhen(session('status'), 'includes.status')
+			@includeWhen(session('error'), 'includes.error')
+
             @yield('content')
 		</div>
         <!-- /Dashboard container -->		
@@ -87,6 +90,10 @@
             selectAll: true
         });
     });
+
+	window.setTimeout(function(){
+		$('.alert-dismissible').hide(400);
+	}, 5000)
 </script>
 @stack('scripts')
 </body>
