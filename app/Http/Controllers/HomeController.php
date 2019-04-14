@@ -68,12 +68,20 @@ class HomeController extends Controller
         $user->last_name = $request->last_name;
         $user->email = $request->email;
 
-        if ($request->has('avatar')) {
+        // Avatar
+        if ($request->hasFile('avatar')) {
             $request->validate([
                 'avatar' => 'file|max:51200|mimes:jpeg,jpg,png',
             ]);
+            $avatar = $request->file('avatar');
+            if ($avatar->isValid()) {
+                $dir = 'public/avatars';
+                //dd($dir);
+                $avatar->storeAs($dir, $user->id.'.png');
+            }
         }
 
+        // Password
         if (isset($request->password)) {
             $request->validate([
                 'password' => 'required|string|min:6|confirmed',
