@@ -6,7 +6,7 @@
             <!-- footer logo -->
             <div class="col-md-4 col-md-push-4">
                 <div class="footer-brand">
-                    <a class="logo" href="index.html">
+                    <a class="logo" href="{{ route('home') }}">
                         <img class="logo-img" src="./img/site-logo.png" alt="logo">
                     </a>
                 </div>

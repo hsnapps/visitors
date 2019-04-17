@@ -47,7 +47,7 @@
                     <span class="fa fa-trash"></span>
                 </button>
 
-                <form id="delete_{{ $item->id }}" action="{{ route('remove-course-from-cart') }}" method="post">
+                <form id="remove_{{ $item->id }}" action="{{ route('remove-course-from-cart') }}" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $item->id }}">
                 </form>
@@ -72,11 +72,21 @@
         </tr>
     </tbody>
 </table>
-<div class="uk-float-right">
-    <button class="uk-button uk-button-xl uk-button-primary" type="button" onclick="document.getElementById('remove_{{ $item->id }}').submit();">
+<div class="">
+    <button class="uk-float-right uk-button uk-button-xl uk-button-primary" type="button" onclick="document.getElementById('prepare-payment').submit();">
         <span class="fa fa-credit-card "></span> Pay Here
     </button>
+    <a class="uk-float-left uk-button uk-button-xl uk-button-default" href="{{ route('home') }}" onclick="document.getElementById('prepare-payment').submit();">
+        <span class="fa fa-chevron-left "></span> &nbsp;&nbsp;Back to Dashboard
+    </a>
 </div>
+
+<form id="prepare-payment" action="{{ route('prepare-payment') }}" method="post">
+    {{ csrf_field() }}
+    <input type="hidden" name="subtotal" value="{{ $subtotal }}">    
+    <input type="hidden" name="vat" value="{{ $vat }}">
+    <input type="hidden" name="amount" value="{{ $total }}">
+</form>
 @endsection
 
 @push('scripts') 

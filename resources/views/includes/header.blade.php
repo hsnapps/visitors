@@ -6,7 +6,7 @@
         <div class="navbar-header">
             <!-- Logo -->
             <div class="navbar-brand">
-                <a class="logo" href="index.html">
+                <a class="logo" href="{{ route('home') }}">
                     <img class="logo-img" src="./img/site-logo.png" alt="logo">
                     <img class="logo-alt-img" src="./img/site-logo.png" alt="logo">
                 </a>
@@ -24,7 +24,7 @@
         <!-- Navigation -->
         <nav id="nav">
             <ul class="main-nav nav navbar-nav navbar-right">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="#">Abstract </a></li>
                 <li><a href="#">Registration </a></li>
                 <li> <!-- First Tier Drop Down -->

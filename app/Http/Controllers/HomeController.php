@@ -124,4 +124,73 @@ class HomeController extends Controller
         Cart::destroy($request->id);
         return back();
     }
+
+    public function preparePayment(Request $request)
+    {
+        $entityId = env('OPPWA_ENTITYID');
+        $currency = env('CURRENCY');
+        $amount = $request->amount;
+        $url = env('OPPWA_CHECKOUT_URL');
+        $data = "entityId=$entityId" .
+                    "&amount=$amount" .
+                    "&currency=$currency" .
+                    "&paymentType=DB";
+        $token = env('OPPWA_AUTH_TOKEN');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization:Bearer $token"));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // this should be set to true in production
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responseData = curl_exec($ch);
+        
+        if(curl_errno($ch)) {
+            // return curl_error($ch);
+            return back()->with('error', curl_error($ch));
+        }
+        curl_close($ch);
+
+        $response = json_decode($responseData);
+
+        return redirect()->route('payment-form', ['checkoutId' => $response->id]);
+    }
+
+    public function showPaymentForm($checkoutId)
+    {
+        return view('payment', [
+            'script_src' => env('OPPWA_PAYMENT_SCRIPT').$checkoutId,
+            'checkoutId' => $checkoutId,
+        ]);
+    }
+
+    public function paymentStatus(Request $request)
+    {
+        dd($request->all());
+
+        $entityId = env('OPPWA_ENTITYID');
+        $resourcePath = $request->resourcePath;
+        $result_URL = env('OPPWA_RESULT_URL');
+        $url = str_replace('<id>', '');
+        $token = env('OPPWA_AUTH_TOKEN');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Authorization:Bearer OGE4Mjk0MTc0ZDA1OTViYjAxNGQwNWQ4MjllNzAxZDF8OVRuSlBjMm45aA=='));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);// this should be set to true in production
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responseData = curl_exec($ch);
+        if(curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        $response = json_decode($responseData);
+
+        return view('payment', [
+            'checkoutId' => $response->id
+        ]);
+    }
 }

@@ -35,7 +35,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <!-- row modal for add course -->

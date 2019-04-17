@@ -26,8 +26,8 @@
 	<link type="text/css" rel="stylesheet" href="{{ url('css/custom.css') }}" />
 	<link type="text/css" rel="stylesheet" href="{{ url('css/menu.css') }}" />
 
-	<link href='css/simplelightbox.css') }}' rel='stylesheet' type='text/css'>
-	<link href='css/lightbox-style.css') }}' rel='stylesheet' type='text/css'>
+	<link href='{{ url('css/simplelightbox.css') }}' rel='stylesheet' type='text/css'>
+	<link href='{{ url('css/lightbox-style.css') }}' rel='stylesheet' type='text/css'>
 
 
     <link href="{{ url('css/jquery-ui.css') }}" rel="stylesheet" />

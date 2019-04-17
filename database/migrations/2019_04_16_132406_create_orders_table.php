@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCartsTable extends Migration
+class CreateOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreateCartsTable extends Migration
      */
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('passport_id');
-            $table->string('item_type')->comment('Either courses or wetlabs');
-            $table->unsignedInteger('item_id')->comment('The record id in the tables courses or wetlabs');
-            $table->string('title');
-            $table->date('starts_on');
-            $table->decimal('price', 8, 2);
-            $table->integer('days')->default(1);
-            $table->date('expiration_date');
-            $table->string('checkout_id')->nullable();
+            $table->string('checkout_id')->unique();
+            $table->decimal('subtotal', 8, 2);
+            $table->decimal('vat', 8, 2);
+            $table->decimal('amount', 8, 2);
+            $table->boolean('status')->default(0);
             $table->timestamps();
 
             $table->foreign('passport_id')->references('id')->on('passports')->onDelete('cascade');
@@ -37,6 +34,6 @@ class CreateCartsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('orders');
     }
 }

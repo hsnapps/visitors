@@ -5,35 +5,32 @@
             <button type="button" class="speaker-modal-close" data-dismiss="modal"></button>
             <div class="modal-body">
                 <div class="row">
-                    <form>
+                    <form action="{{ route('add-course-to-cart') }}" method="POST">
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="course-title">Wetlab Title</label>
                                 <input type="text" class="form-control" id="course-title" placeholder="Enter Course Title">
                             </div>
                         </div>
-
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="course-category">Choose Wetlab Category</label>
-                                <select name="basic[]" multiple="multiple" class="2col active">
+                                <select name="courses[]" multiple="multiple" class="2col active">
                                     @foreach ($wetlabs_list as $wetlab)
                                     <option value="{{ $wetlab->id }}">{{ $wetlab->name }}</option>    
                                     @endforeach                                                        
                                 </select>
                             </div>
-
                         </div>
-
-
                         <div class="form-row col-md-12">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
+                        {{ csrf_field() }}
+                        <input type="hidden" name="item_type" value="wetlabs">
                     </form>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <!-- row modal for add wetlab -->
