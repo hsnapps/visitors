@@ -21,5 +21,8 @@ class Payment extends Model
         'card_expiration',
         'card_last_4',
         'currency',
+        'payment_result_id',
+        'payment_result_code',
+        'payment_result_description',
      ];
 }

@@ -13,7 +13,6 @@ class Order extends Model
      */
      protected $fillable = [
         'passport_id',
-        'checkout_id',
         'subtotal',
         'vat',
         'amount',

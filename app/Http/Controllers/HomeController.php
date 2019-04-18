@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use App\Course;
 use App\WetLab;
 use App\Cart;
+use App\Payment;
+use App\Order;
 
 class HomeController extends Controller
 {
@@ -132,6 +134,18 @@ class HomeController extends Controller
             return redirect()->route('cart');
         }
 
+        $order = session('order', null);
+        if (!isset($order)) {
+            $order = Order::create([
+                'passport_id' => $request->user()->id,
+                'subtotal' => $request->subtotal,
+                'vat' => $request->vat,
+                'amount' => $request->amount,
+                'status' => false,
+            ]);
+            session(['order' => $order]);
+        }
+
         $months = array();
         for ($i=1; $i < 13; $i++) { 
             $dt = Carbon::parse("2019-$i-01");
@@ -153,40 +167,30 @@ class HomeController extends Controller
             'amount' => $request->amount,
             'months' => $months,
             'years' => $years,
+            'subtotal' => $request->subtotal,
+            'vat' => $request->vat,
         ]);
     }
 
-    public function pay(Request $request)
-    {
+    public function renderPaymentForm(Request $request) {
         $url = env('OPPWA_CHECKOUT_URL');
         $entityId = env('OPPWA_ENTITYID');
         $userId = env('OPPWA_USER_ID');
         $password = env('OPPWA_PASSWORD');
         $currency = env('CURRENCY');
+        $passport = $request->user();
 
-        $amount  =  $request->amount;
-        $cardType = $request->cardType;
-        $paymentType = '';
-        $cardNo    = $request->card_number;
-        $cardHolder = $request->card_holder_name;
-        $cardExpiryMonth = str_pad($request->expiry_month, 2, '0', STR_PAD_LEFT);
-        $cardExpiryYear = $request->expiry_year;
-        $cvv = $request->cvv;
-        $shopperResultUrl = route('payment-result');
-
-	    $data = "authentication.userId=$userId" .
+        $data = "authentication.userId=$userId" .
             "&authentication.password=$password" .
             "&authentication.entityId=$entityId" .
-            "&amount=$amount" .
+            "&amount=".$request->amount.
             "&currency=$currency" .
-            "&paymentBrand=$cardType" .
-            "&paymentType=$paymentType" .
-            "&card.number=$cardNo" .
-            "&card.holder=$cardHolder" .
-            "&card.expiryMonth=$cardExpiryMonth" .
-            "&card.expiryYear=$cardExpiryYear" .
-            "&card.cvv=$cvv".
-            "&shopperResultUrl=$shopperResultUrl";
+            "&merchantTransactionId=$passport->id".
+            "&customer.email=".$passport->email.
+            "&customer.givenName=".$passport->first_name.
+            "&customer.surname=".$passport->last_name.
+            "&paymentType=DB".
+            "&paymentBrand=VISA";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -197,13 +201,88 @@ class HomeController extends Controller
         $responseData = curl_exec($ch);
 
         if(curl_errno($ch)) {
-            return back()->with('error', curl_error($ch));
+            return curl_error($ch);
         }
         
         curl_close($ch);
         $response = json_decode($responseData);  
         dd($response);
-        return redirect()->route('home')->with('status', 'Thank You for payment Oppwa');
+    }
+
+    public function pay(Request $request)
+    {
+        $url = env('OPPWA_CHECKOUT_URL');
+        $entityId = env('OPPWA_ENTITYID');
+        $userId = env('OPPWA_USER_ID');
+        $password = env('OPPWA_PASSWORD');
+        $currency = env('CURRENCY');
+        $passport = $request->user();
+        $expiryMonth = strlen($request->expiry_month) == 1 ? '0'.$request->expiry_month : $request->expiry_month;
+
+        $data = "authentication.userId=$userId" .
+            "&authentication.password=$password" .
+            "&authentication.entityId=$entityId" .
+            "&amount=".$request->amount.
+            "&currency=$currency" .
+            "&merchantTransactionId=$passport->id".
+            "&customer.email=".$passport->email.
+            "&customer.givenName=".$passport->first_name.
+            "&customer.surname=".$passport->last_name.
+            "&paymentType=DB".
+            "&paymentBrand=$request->cardType".
+            "&card.holder=$request->card_holder_name".
+            "&card.number=$request->card_number".
+            "&card.expiryMonth=$expiryMonth".
+            "&card.expiryYear=$request->expiry_year".
+            "&card.cvv=$request->cvv";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // this should be set to true in production
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responseData = curl_exec($ch);
+        if(curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+
+        $response = json_decode($responseData);
+
+        $order = session('order', null);
+        if (!isset($order)) {
+            $order = Order::create([
+                'passport_id' => $request->user()->id,
+                'subtotal' => -1,
+                'vat' => -1,
+                'amount' => $request->amount,
+                'status' => false,
+            ]);
+            session(['order' => $order]);
+        }
+
+        Payment::create([
+            'passport_id' => $passport->id,
+            'order_id' => $order->id,
+            'amount' => $request->amount,
+            'online' => true,
+            'card_type' => $request->cardType,
+            'card_holder' => $request->card_holder_name,
+            'card_expiration' => sprintf('%s-%s', $expiryMonth, $request->expiry_year),
+            'card_last_4' => substr($request->card_number, 11, 4),
+            'currency' => $currency,
+            'payment_result_id' => $response->id,
+            'payment_result_code' => $response->result->code,
+            'payment_result_description' => $response->result->description,
+        ]);
+
+        if (starts_with($response->result->code, '000.000.')) {
+            $order->status = true;
+            $order->save();
+        }
+
+        dd($response);
     }
 
     public function paymentStatus(Request $request)
