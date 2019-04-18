@@ -7,7 +7,7 @@
             <div class="col-md-4 col-md-push-4">
                 <div class="footer-brand">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="logo-img" src="./img/site-logo.png" alt="logo">
+                        <img class="logo-img" src="{{ url('img/site-logo.png') }}" alt="logo">
                     </a>
                 </div>
             </div>
@@ -28,8 +28,7 @@
 
             <!-- copyright -->
             <div class="col-md-4 col-md-pull-8">
-                <span class="copyright">
-                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | RSOS</span>
+                <span class="copyright">Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | RSOS</span>
             </div>
             <!-- /copyright -->
 

@@ -7,8 +7,8 @@
             <!-- Logo -->
             <div class="navbar-brand">
                 <a class="logo" href="{{ route('home') }}">
-                    <img class="logo-img" src="./img/site-logo.png" alt="logo">
-                    <img class="logo-alt-img" src="./img/site-logo.png" alt="logo">
+                    <img class="logo-img" src="{{ url('img/site-logo.png') }}" alt="logo">
+                    <img class="logo-alt-img" src="{{ url('img/site-logo.png') }}" alt="logo">
                 </a>
             </div>
             <!-- /Logo -->

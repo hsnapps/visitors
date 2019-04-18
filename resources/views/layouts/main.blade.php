@@ -48,6 +48,7 @@
 	<div id="dashboard-page" class="section container">
 		<!-- Dashboard container -->
 		<div class="container" >
+			@includeWhen(session('success'), 'includes.success')
 			@includeWhen(session('status'), 'includes.status')
 			@includeWhen(session('error'), 'includes.error')
 
@@ -58,25 +59,20 @@
 
 	@include('includes.footer')
 
-	<!-- jQuery Plugins -->
-	<script src="{{ url('js/jquery.min.js') }}"></script>
-	<script src="{{ url('js/bootstrap.min.js') }}"></script>
-	<script src="{{ url('js/jquery.waypoints.min.js') }}"></script>
-	<script src="{{ url('js/owl.carousel.min.js') }}"></script>
-	<script src="{{ url('js/jquery.stellar.min.js') }}"></script>
-	
-	
-	<script src="{{ url('js/jquery.countTo.js') }}"></script>
-	<script src="{{ url('js/main.js') }}"></script>
-	<script src="{{ url('js/custom.js') }}"></script>
-	<script src="{{ url('js/aos.js') }}"></script>
-    
-	<script type="text/javascript" src="{{ url('js/simple-lightbox.js') }}"></script>
-    <script type="text/javascript" src="{{ url('js/app.js') }}"></script>
-
-
-<script src="{{ url('js/jquery-ui.js') }}"></script>
-<script src="{{ url('js/jquery.multiselect.js') }}"></script>
+<!-- jQuery Plugins -->
+<script src="{{ url('js/jquery.min.js') }}"></script>
+<script src="{{ url('js/bootstrap.min.js') }}"></script>
+{{-- <script src="{{ url('js/jquery.waypoints.min.js') }}"></script> --}}
+{{-- <script src="{{ url('js/owl.carousel.min.js') }}"></script> --}}
+{{-- <script src="{{ url('js/jquery.stellar.min.js') }}"></script> --}}
+{{-- <script src="{{ url('js/jquery.countTo.js') }}"></script> --}}
+{{-- <script src="{{ url('js/main.js') }}"></script> --}}
+{{-- <script src="{{ url('js/custom.js') }}"></script> --}}
+{{-- <script src="{{ url('js/aos.js') }}"></script> --}}    
+{{-- <script type="text/javascript" src="{{ url('js/simple-lightbox.js') }}"></script> --}}
+{{-- <script type="text/javascript" src="{{ url('js/app.js') }}"></script> --}}
+{{-- <script src="{{ url('js/jquery-ui.js') }}"></script> --}}
+{{-- <script src="{{ url('js/jquery.multiselect.js') }}"></script> --}}
 
 <script>
     $(function () {

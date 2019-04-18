@@ -18,6 +18,7 @@ Route::post('/profile-update', 'HomeController@updateProfile')->name('profile.up
 Route::post('/add-course-to-cart', 'HomeController@addCourseToCart')->name('add-course-to-cart');
 Route::view('/cart', 'cart')->name('cart');
 Route::post('/remove-course-from-cart', 'HomeController@removeCourseFromCart')->name('remove-course-from-cart');
-Route::post('/prepare-payment', 'HomeController@preparePayment')->name('prepare-payment');
-Route::get('/payment/{checkoutId}', 'HomeController@showPaymentForm')->name('payment-form');
-Route::get('/receipt', 'HomeController@paymentStatus')->name('receipt');
+Route::post('/payment', 'HomeController@showPaymentForm')->name('prepare-payment');
+Route::get('/payment', 'HomeController@showPaymentForm');
+Route::post('/pay', 'HomeController@pay')->name('pay');
+Route::get('/receipt', 'HomeController@paymentStatus')->name('payment-result');
