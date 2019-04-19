@@ -1,12 +1,14 @@
-@extends('layouts.main')
+@extends('layouts.main') 
 
-@push('styles') 
-<link rel="stylesheet" href="{{ url('css/payment.css') }}">
-@endpush 
+@push('styles')
+@endpush
 
 @section('content')
-  @include('components.credit_card', ['route' => 'pay'])
+<div class="well well-sm">
+  <h3>Amount: {{ $currency.' '.$amount_formated }}</h3>
+</div>
+<form action="{{ route('payment-result') }}" class="paymentWidgets" data-brands="VISA MASTER MADA"></form>
 @endsection
-
-@push('scripts') 
+ @push('scripts')
+<script src="https://oppwa.com/v1/paymentWidgets.js?checkoutId={{ $checkoutId }}"></script>
 @endpush

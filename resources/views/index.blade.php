@@ -94,17 +94,31 @@
         </div>
     </div>
 </div>
-
-@if ($cart_count > 0)
-    <a href="{{ route('cart') }}" class="float" title="Got to cart"><i class="fa fa-2x fa-shopping-cart floating-btn"></i><span class="badge">{{ $cart_count }}</span></a>
-@endif
 <!-- row -->
 
     @include('modals.profile_edit')
     @include('modals.course_adding')
     @include('modals.wetlab_adding')
 
+    @php
+        $cart_count = auth()->user()->cart()->count();
+    @endphp
+    @includeWhen($cart_count > 0, 'components.cart', ['cart_count' => $cart_count])
 @endsection
 
 @push('scripts')
+<script src="{{ url('js/jquery.multiselect.js') }}"></script>
+<script>
+    $(function () {
+        $('select[multiple].active.2col').multiselect({
+            columns: 2,
+            placeholder: 'Select Course',
+            search: true,
+            searchOptions: {
+                'default': 'Search Course'
+            },
+            selectAll: true
+        });
+    });
+</script>
 @endpush

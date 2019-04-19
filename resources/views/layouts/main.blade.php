@@ -52,7 +52,8 @@
 			@includeWhen(session('status'), 'includes.status')
 			@includeWhen(session('error'), 'includes.error')
 
-            @yield('content')
+			@yield('content')
+			
 		</div>
         <!-- /Dashboard container -->		
 	</div>
@@ -62,36 +63,19 @@
 <!-- jQuery Plugins -->
 <script src="{{ url('js/jquery.min.js') }}"></script>
 <script src="{{ url('js/bootstrap.min.js') }}"></script>
-{{-- <script src="{{ url('js/jquery.waypoints.min.js') }}"></script> --}}
-{{-- <script src="{{ url('js/owl.carousel.min.js') }}"></script> --}}
-{{-- <script src="{{ url('js/jquery.stellar.min.js') }}"></script> --}}
-{{-- <script src="{{ url('js/jquery.countTo.js') }}"></script> --}}
-{{-- <script src="{{ url('js/main.js') }}"></script> --}}
-{{-- <script src="{{ url('js/custom.js') }}"></script> --}}
-{{-- <script src="{{ url('js/aos.js') }}"></script> --}}    
-{{-- <script type="text/javascript" src="{{ url('js/simple-lightbox.js') }}"></script> --}}
-{{-- <script type="text/javascript" src="{{ url('js/app.js') }}"></script> --}}
+<script src="{{ url('js/jquery.waypoints.min.js') }}"></script>
+<script src="{{ url('js/owl.carousel.min.js') }}"></script>
+<script src="{{ url('js/jquery.stellar.min.js') }}"></script>
+<script src="{{ url('js/jquery.countTo.js') }}"></script>
+<script src="{{ url('js/main.js') }}"></script>
+<script src="{{ url('js/custom.js') }}"></script>
+<script src="{{ url('js/aos.js') }}"></script>    
+{{-- <script src="{{ url('js/simple-lightbox.js') }}"></script> --}}
+{{-- <script src="{{ url('js/app.js') }}"></script> --}}
 {{-- <script src="{{ url('js/jquery-ui.js') }}"></script> --}}
-{{-- <script src="{{ url('js/jquery.multiselect.js') }}"></script> --}}
 
 <script>
-    $(function () {
-        $('select[multiple].active.2col').multiselect({
-            columns: 2,
-            placeholder: 'Select Course',
-            search: true,
-            searchOptions: {
-                'default': 'Search Course'
-            },
-            selectAll: true
-        });
-    });
-
 	$('[title]').tooltip();
-
-	window.setTimeout(function(){
-		$('.alert-dismissible').hide(400);
-	}, 5000)
 </script>
 @stack('scripts')
 </body>

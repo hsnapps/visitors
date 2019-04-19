@@ -83,9 +83,9 @@
 
 <form id="prepare-payment" action="{{ route('prepare-payment') }}" method="post">
     {{ csrf_field() }}
-    <input type="hidden" name="subtotal" value="{{ $subtotal }}">    
-    <input type="hidden" name="vat" value="{{ $vat }}">
-    <input type="hidden" name="amount" value="{{ $total }}">
+    <input type="hidden" name="subtotal" value="{{ number_format($subtotal, 2, '.', ',') }}">    
+    <input type="hidden" name="vat" value="{{ number_format($vat, 2) }}">
+    <input type="hidden" name="amount" value="{{ number_format($total, 2) }}">
 </form>
 @endsection
 

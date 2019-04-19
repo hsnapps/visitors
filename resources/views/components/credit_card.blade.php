@@ -1,5 +1,9 @@
+@push('styles') 
+<link rel="stylesheet" href="{{ url('css/payment.css') }}">
+@endpush 
+
 <div class="container col-md-8 col-md-offset-2" style="margin-top: -20px;">
-  <form class="form-horizontal" role="form" action="{{ route($route) }}" method="POST">
+  <form class="form-horizontal" role="form" action="{{ route('cc-pay') }}" method="POST">
     <div class="well well-sm">
       <h3>Amount: {{ $currency.' '.$amount_formated }}</h3>
     </div>

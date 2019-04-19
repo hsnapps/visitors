@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Course;
 use App\WetLab;
@@ -40,9 +41,6 @@ class HomeController extends Controller
             return $item->id;
         })->toArray();
         $wetlabsList = WetLab::whereNotIn('id', $wetlabs_ids)->get();
-
-        // dd(storage_path('app\\public\\avatars\\empty.png'));
-        // dd(file_exists(storage_path('app/public/avatars/empty.png')));
 
         return view('index', [
             'user' => $user,
@@ -80,7 +78,6 @@ class HomeController extends Controller
             $avatar = $request->file('avatar');
             if ($avatar->isValid()) {
                 $dir = 'public/avatars';
-                //dd($dir);
                 $avatar->storeAs($dir, $user->id.'.png');
             }
         }
@@ -134,16 +131,27 @@ class HomeController extends Controller
             return redirect()->route('cart');
         }
 
-        $order = session('order', null);
-        if (!isset($order)) {
-            $order = Order::create([
-                'passport_id' => $request->user()->id,
-                'subtotal' => $request->subtotal,
-                'vat' => $request->vat,
-                'amount' => $request->amount,
-                'status' => false,
-            ]);
-            session(['order' => $order]);
+        $passport = $request->user();
+        if(!isset($order)) {
+            $order = Order::where([
+                    'passport_id' => $passport->id,
+                    'amount' => $request->amount,
+                    'status' => false,
+                ])->orderByDesc('created_at')
+                ->first();
+            if (!isset($order)) {
+                $order = Order::create([
+                    'passport_id' => $passport->id,
+                    'subtotal' => $request->subtotal,
+                    'checkout_id' => null,
+                    'vat' => $request->vat,
+                    'amount' => $request->amount,
+                    'status' => false,
+                ]);
+                session(['order' => $order]);
+            } else {
+                session(['order' => $order]);
+            }
         }
 
         $months = array();
@@ -161,7 +169,7 @@ class HomeController extends Controller
             $year++;
         }
 
-        return view('payment', [
+        return view('cc_payment', [
             'currency' => env('CURRENCY'),
             'amount_formated' => number_format($request->amount, 2 , '.', ','),
             'amount' => $request->amount,
@@ -173,68 +181,22 @@ class HomeController extends Controller
     }
 
     public function renderPaymentForm(Request $request) {
-        $url = env('OPPWA_CHECKOUT_URL');
-        $entityId = env('OPPWA_ENTITYID');
-        $userId = env('OPPWA_USER_ID');
-        $password = env('OPPWA_PASSWORD');
-        $currency = env('CURRENCY');
+        $url = 'https://oppwa.com/v1/checkouts';
         $passport = $request->user();
-
-        $data = "authentication.userId=$userId" .
-            "&authentication.password=$password" .
-            "&authentication.entityId=$entityId" .
-            "&amount=".$request->amount.
-            "&currency=$currency" .
-            "&merchantTransactionId=$passport->id".
-            "&customer.email=".$passport->email.
-            "&customer.givenName=".$passport->first_name.
-            "&customer.surname=".$passport->last_name.
-            "&paymentType=DB".
-            "&paymentBrand=VISA";
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);// this should be set to true in production
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $responseData = curl_exec($ch);
-
-        if(curl_errno($ch)) {
-            return curl_error($ch);
-        }
-        
-        curl_close($ch);
-        $response = json_decode($responseData);  
-        dd($response);
-    }
-
-    public function pay(Request $request)
-    {
-        $url = env('OPPWA_CHECKOUT_URL');
-        $entityId = env('OPPWA_ENTITYID');
-        $userId = env('OPPWA_USER_ID');
-        $password = env('OPPWA_PASSWORD');
-        $currency = env('CURRENCY');
-        $passport = $request->user();
-        $expiryMonth = strlen($request->expiry_month) == 1 ? '0'.$request->expiry_month : $request->expiry_month;
-
-        $data = "authentication.userId=$userId" .
-            "&authentication.password=$password" .
-            "&authentication.entityId=$entityId" .
-            "&amount=".$request->amount.
-            "&currency=$currency" .
-            "&merchantTransactionId=$passport->id".
-            "&customer.email=".$passport->email.
-            "&customer.givenName=".$passport->first_name.
-            "&customer.surname=".$passport->last_name.
-            "&paymentType=DB".
-            "&paymentBrand=$request->cardType".
-            "&card.holder=$request->card_holder_name".
-            "&card.number=$request->card_number".
-            "&card.expiryMonth=$expiryMonth".
-            "&card.expiryYear=$request->expiry_year".
-            "&card.cvv=$request->cvv";
+        $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
+                '&authentication.password=qfERPN7gAA' .
+                '&authentication.entityId=8ac9a4ca6561110c01657c8adde4629e' .
+                '&amount='.$request->amount .
+                '&currency=SAR' .
+                '&merchantTransactionId='.$passport->id .
+                '&customer.merchantCustomerId='.$passport->id .
+                '&customer.email='.$passport->email .
+                '&customer.givenName='.$passport->first_name .
+                '&customer.surname='.$passport->last_name .
+                '&paymentType=DB' .
+                '&billing.country='.$passport->country .
+                '&billing.city='.$passport->country .
+                '&billing.street1='.$passport->country;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -247,46 +209,97 @@ class HomeController extends Controller
             return curl_error($ch);
         }
         curl_close($ch);
-
+        
         $response = json_decode($responseData);
-
-        $order = session('order', null);
-        if (!isset($order)) {
-            $order = Order::create([
-                'passport_id' => $request->user()->id,
-                'subtotal' => -1,
-                'vat' => -1,
+        logger($responseData);
+        if (isset($response->id)) {
+            return view('payment', [
+                'checkoutId' => $response->id, 
+                'currency' => 'SAR',
+                'amount_formated' => number_format($request->amount, 2 , '.', ','),
                 'amount' => $request->amount,
-                'status' => false,
             ]);
-            session(['order' => $order]);
         }
 
-        Payment::create([
-            'passport_id' => $passport->id,
-            'order_id' => $order->id,
-            'amount' => $request->amount,
-            'online' => true,
-            'card_type' => $request->cardType,
-            'card_holder' => $request->card_holder_name,
-            'card_expiration' => sprintf('%s-%s', $expiryMonth, $request->expiry_year),
-            'card_last_4' => substr($request->card_number, 11, 4),
-            'currency' => $currency,
-            'payment_result_id' => $response->id,
-            'payment_result_code' => $response->result->code,
-            'payment_result_description' => $response->result->description,
-        ]);
-
-        if (starts_with($response->result->code, '000.000.')) {
-            $order->status = true;
-            $order->save();
+        if (isset($response)) {
+            if (isset($response->result)) {
+                return back()->with('error', sprintf('%s : %s', $response->result->code, $response->result->description));   
+            }
         }
 
-        dd($response);
+        if (starts_with($responseData, '<!DOCTYPE HTML PUBLIC')) {
+            return $responseData;
+        }
+
+        return back()->with('error', $responseData);   
     }
 
     public function paymentStatus(Request $request)
     {
-        dd($request->all());
+        $passport = $request->user();
+        $entityId = '8ac9a4ca6561110c01657c8adde4629e';
+        $userId = '8ac9a4ca6561110c01657c8a9c8b629a';
+        $password = 'qfERPN7gAA';
+
+        $url = 'https://oppwa.com'.$request->resourcePath;
+        $url .= "?authentication.userId=$userId";
+        $url .=	"&authentication.password=$password";
+        $url .=	"&authentication.entityId=$entityId";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responseData = curl_exec($ch);
+        
+        if(curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        $response = json_decode($responseData);
+
+        logger($responseData);
+
+        if ($response->result->code == '000.000.000') {
+            DB::beginTransaction();
+
+            Payment::create([
+                'passport_id' => $passport->id,
+                'amount' => $response->amount,
+                'online' => true,
+                'card_type' => $response->paymentBrand,
+                'card_holder' => $response->card->holder,
+                'card_expiration' => sprintf('%s-%s', $response->card->expiryMonth, $response->card->expiryYear),
+                'card_last_4' => $response->card->last4Digits,
+                'currency' => $response->currency,
+                'payment_result_id' => $response->id,
+                'payment_result_code' => $response->result->code,
+                'payment_result_description' => $response->result->description,
+            ]);
+
+            foreach ($passport->cart as $cart) {
+                if ($cart->item_type == 'courses') {
+                    $course = Course::find($cart->item_id);
+                    $course->seats = $course->seats - 1;
+                    $course->save();
+                }
+
+                if ($cart->item_type == 'wetlabs') {
+                    $course = WetLab::find($cart->item_id);
+                    $course->seats = $course->seats - 1;
+                    $course->save();
+                }
+            }
+
+            $passport->cart()->delete();
+
+            DB::commit();
+        }
+        
+        return view('receipt', [
+            'code' => $response->result->code,
+            'description' => $response->result->description,
+        ]);
     }
 }

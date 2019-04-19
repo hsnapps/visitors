@@ -14,6 +14,7 @@ class Order extends Model
      protected $fillable = [
         'passport_id',
         'subtotal',
+        'checkout_id',
         'vat',
         'amount',
         'status',

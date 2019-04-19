@@ -14,7 +14,7 @@ class RemoveCheckoutIdFromOrders extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('checkout_id');
+            $table->string('checkout_id')->nullable()->change();
         });
     }
 
@@ -26,7 +26,7 @@ class RemoveCheckoutIdFromOrders extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('checkout_id')->unique()->after('passport_id');
+            $table->string('checkout_id')->unique()->change();
         });
     }
 }
