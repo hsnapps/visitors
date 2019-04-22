@@ -9,6 +9,11 @@
 </div>
 <form action="{{ route('payment-result') }}" class="paymentWidgets" data-brands="VISA MASTER MADA"></form>
 @endsection
- @push('scripts')
-<script src="https://oppwa.com/v1/paymentWidgets.js?checkoutId={{ $checkoutId }}"></script>
+ 
+@push('scripts')
+  @if (env('APP_DEBUG'))
+  <script src="https://test.oppwa.com/v1/paymentWidgets.js?checkoutId={{ $checkoutId }}"></script>
+  @else
+  <script src="https://oppwa.com/v1/paymentWidgets.js?checkoutId={{ $checkoutId }}"></script>
+  @endif
 @endpush

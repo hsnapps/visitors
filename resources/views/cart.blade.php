@@ -32,7 +32,7 @@
         @php 
             $item_type = str_singular(title_case($item->item_type)) ;
             $subtotal = auth()->user()->cart()->sum('price');
-            $vat = auth()->user()->cart()->sum('price') * 0.05;
+            $vat = auth()->user()->cart()->sum('price') * env('VAT');
             $total = $subtotal + $vat;
         @endphp
         <tr>

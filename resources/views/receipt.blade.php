@@ -4,9 +4,9 @@
 @endpush 
 
 @section('content')
-  @if ($code == '000.000.000')
+  @if ($code == $success_value)
     <div class="alert alert-success" role="alert">
-        <h3>Your payment proccessed successfully! Please, print your receipt from <a href="#">here</a></h3>
+        <h3>Your payment proccessed successfully! Please, print your receipt from <a target="_blank" href="{{ route('order-print', ['order' => $order]) }}">here</a></h3>
     </div>
   @else
     <div class="alert alert-warning" role="alert">

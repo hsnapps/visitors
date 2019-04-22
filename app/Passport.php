@@ -10,10 +10,10 @@ class Passport extends Authenticatable
     use Notifiable;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'event_id',
         'admin_id',
@@ -42,12 +42,7 @@ class Passport extends Authenticatable
         'status',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-     protected $hidden = [
+    protected $hidden = [
         'password', 'remember_token',
     ];
 
@@ -58,34 +53,30 @@ class Passport extends Authenticatable
 
     public function avatar()
     {
-        $path = storage_path('app/public/avatars/'.$this->id.'.png');
-        if(file_exists($path)) {
-            return url('storage/avatars/'.$this->id.'.png');
+        $path = storage_path('app/public/avatars/' . $this->id . '.png');
+        if (file_exists($path)) {
+            return url('storage/avatars/' . $this->id . '.png');
         }
         return url('storage/avatars/empty.png');
     }
 
-    /**
-     * The courses that belong to the user.
-     */
-     public function courses()
-     {
-         return $this->belongsToMany(Course::class);
-     }
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
+    }
 
-     /**
-     * The wetlabs that belong to the user.
-     */
-     public function wetlabs()
-     {
-         return $this->belongsToMany(WetLab::class, 'passport_wetlab', 'passport_id', 'wetlab_id');
-     }
+    public function wetlabs()
+    {
+        return $this->belongsToMany(WetLab::class, 'passport_wetlab', 'passport_id', 'wetlab_id');
+    }
 
-     /**
-     * Get the comments for the blog post.
-     */
     public function cart()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

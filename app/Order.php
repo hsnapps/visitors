@@ -6,26 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-     protected $fillable = [
+    protected $fillable = [
         'passport_id',
         'subtotal',
-        'checkout_id',
+        'payment_id',
         'vat',
         'amount',
         'status',
-     ];
+    ];
 
-     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'status' => 'boolean',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
+
+    public function passport() {
+        return $this->belongsTo(Passport::class);
+    }
 }
