@@ -1,0 +1,1 @@
+<div class="alert alert-danger text-center" role="alert" style="padding-bottom: 0;"><h3 class="font-weight-bold">DEMO MODE</h3></div>

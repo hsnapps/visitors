@@ -12,22 +12,22 @@
 	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700,900" rel="stylesheet">
 
 	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+	<link type="text/css" rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}" />
 
 	<!-- Owl Carousel -->
-	<link type="text/css" rel="stylesheet" href="css/owl.carousel.css" />
-	<link type="text/css" rel="stylesheet" href="css/owl.theme.default.css" />
+	<link type="text/css" rel="stylesheet" href="{{ url('css/owl.carousel.css') }}" />
+	<link type="text/css" rel="stylesheet" href="{{ url('css/owl.theme.default.css') }}" />
 
 	<!-- Font Awesome Icon -->
-	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ url('css/font-awesome.min.css') }}">
 
 	<!-- Custom stlylesheet -->
-	<link type="text/css" rel="stylesheet" href="css/style.css" />
-	<link type="text/css" rel="stylesheet" href="css/custom.css" />
-	<link type="text/css" rel="stylesheet" href="css/menu.css" />
+	<link type="text/css" rel="stylesheet" href="{{ url('css/style.css') }}" />
+	<link type="text/css" rel="stylesheet" href="{{ url('css/custom.css') }}" />
+	<link type="text/css" rel="stylesheet" href="{{ url('css/menu.css') }}" />
 
-	<link href='css/simplelightbox.css' rel='stylesheet' type='text/css'>
-	<link href='css/lightbox-style.css' rel='stylesheet' type='text/css'>
+	<link href="{{ url('css/simplelightbox.css') }}" rel='stylesheet' type='text/css'>
+	<link href="{{ url('css/lightbox-style.css') }}" rel='stylesheet' type='text/css'>
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,9 +45,9 @@
 			<div class="navbar-header">
 				<!-- Logo -->
 				<div class="navbar-brand">
-					<a class="logo" href="index.html">
-						<img class="logo-img" src="./img/site-logo.png" alt="logo">
-						<img class="logo-alt-img" src="./img/site-logo.png" alt="logo">
+					<a class="logo" href="/">
+						<img class="logo-img" src="{{ url('img/site-logo.png') }}" alt="logo">
+						<img class="logo-alt-img" src="{{ url('img/site-logo.png') }}" alt="logo">
 					</a>
 				</div>
 				<!-- /Logo -->
@@ -83,15 +83,15 @@
     <!-- /Footer -->
 
 	<!-- jQuery Plugins -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.stellar.min.js"></script>
+	<script src="{{ url('js/jquery.min.js') }}"></script>
+	<script src="{{ url('js/bootstrap.min.js') }}"></script>
+	<script src="{{ url('js/jquery.waypoints.min.js') }}"></script>
+	<script src="{{ url('js/owl.carousel.min.js') }}"></script>
+	<script src="{{ url('js/jquery.stellar.min.js') }}"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-	<script src="js/google-map.js"></script>
-	<script src="js/jquery.countTo.js"></script>
-	<script src="js/main.js"></script>
+	<script src="{{ url('js/google-map.js') }}"></script>
+	<script src="{{ url('js/jquery.countTo.js') }}"></script>
+	<script src="{{ url('js/main.js') }}"></script>
 
 </body>
 

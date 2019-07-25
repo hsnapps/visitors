@@ -48,6 +48,8 @@
 	<div id="dashboard-page" class="section container">
 		<!-- Dashboard container -->
 		<div class="container" >
+			@includeWhen(env('APP_DEBUG'), 'demo')
+
 			@includeWhen(session('success'), 'includes.success')
 			@includeWhen(session('status'), 'includes.status')
 			@includeWhen(session('error'), 'includes.error')
