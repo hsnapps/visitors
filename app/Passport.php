@@ -53,11 +53,11 @@ class Passport extends Authenticatable
 
     public function avatar()
     {
-        $path = storage_path('app/public/avatars/' . $this->id . '.png');
+        $path = public_path('avatars/' . $this->id . '.png');
         if (file_exists($path)) {
-            return url('storage/avatars/' . $this->id . '.png');
+            return url('avatars/' . $this->id . '.png');
         }
-        return url('storage/avatars/empty.png');
+        return url('avatars/empty.png');
     }
 
     public function courses()

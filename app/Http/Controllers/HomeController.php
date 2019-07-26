@@ -40,8 +40,8 @@ class HomeController extends Controller
         $coursesList = Course::whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
         $wetlabsList = WetLab::whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
-        $bookings_ids = $user->hotelBookings()->get()->map(function ($item) { return $item->id; })->toArray();
-        $bookingList = HotelBooking::whereNotIn('id', $bookings_ids)->get();
+        // $bookings_ids = $user->hotelBookings()->get()->map(function ($item) { return $item->id; })->toArray();
+        $bookingList = HotelBooking::all();
 
         return view('index', [
             'user' => $user,
@@ -108,7 +108,7 @@ class HomeController extends Controller
     {
         // dd($request->all());
 
-        if ($request->item_type) {
+        if ($request->item_type == 'booking') {
             foreach ($request->bookings as $item) {
                 $booking = HotelBooking::findOrFail($item);
                 Cart::create([
