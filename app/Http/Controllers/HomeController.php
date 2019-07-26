@@ -82,7 +82,7 @@ class HomeController extends Controller
             ]);
             $avatar = $request->file('avatar');
             if ($avatar->isValid()) {
-                $dir = 'public/avatars';
+                $dir = 'avatars';
                 $avatar->storeAs($dir, $user->id.'.png');
             }
         }
