@@ -39,7 +39,7 @@
                 <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $item_type }}</td>
                 <td>{{ $item->title }}</td>
-                <td>{{ $item->starts_on->format('d/m/Y') }}</td>
+                <td>{{ isset($item->starts_on) ? $item->starts_on->format('d/m/Y') : 'N/A' }}</td>
                 <td>{{ $item->days }}</td>
                 <td>${{ $item->price }}</td>
                 <td>
@@ -76,9 +76,7 @@
         <button class="uk-float-right uk-button uk-button-xl uk-button-primary" type="button" onclick="document.getElementById('prepare-payment').submit();">
             <span class="fa fa-credit-card "></span> Pay Here
         </button>
-        <a class="uk-float-left uk-button uk-button-xl uk-button-default" href="{{ route('home') }}" onclick="document.getElementById('prepare-payment').submit();">
-            <span class="fa fa-chevron-left "></span> &nbsp;&nbsp;Back to Dashboard
-        </a>
+        @include('back')
     </div>
 
     <form id="prepare-payment" action="{{ route('prepare-payment') }}" method="post">

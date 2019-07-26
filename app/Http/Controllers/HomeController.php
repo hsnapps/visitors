@@ -14,6 +14,7 @@ use App\Payment;
 use App\Order;
 use App\OrderItem;
 use App\Mail\OrderPlaced;
+use App\HotelBooking;
 
 class HomeController extends Controller
 {
@@ -35,21 +36,23 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $courses_ids = $user->courses()->get()->map(function ($item) {
-            return $item->id;
-        })->toArray();
-        $coursesList = Course::whereNotIn('id', $courses_ids)->get();
-        $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) {
-            return $item->id;
-        })->toArray();
-        $wetlabsList = WetLab::whereNotIn('id', $wetlabs_ids)->get();
+        $courses_ids = $user->courses()->get()->map(function ($item) { return $item->id; })->toArray();
+        $coursesList = Course::whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
+        $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
+        $wetlabsList = WetLab::whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
+        $bookings_ids = $user->hotelBookings()->get()->map(function ($item) { return $item->id; })->toArray();
+        $bookingList = HotelBooking::whereNotIn('id', $bookings_ids)->get();
 
         return view('index', [
             'user' => $user,
             'courses' => $user->courses,
             'wetlabs' => $user->wetlabs,
-            'courses_list' => $coursesList,
+            'bookings' => $user->hotelBookings,
+
+            'courses_list' => $coursesList,            
             'wetlabs_list' => $wetlabsList,
+            'bookings_list' => $bookingList,
+
             'cart_count' => $user->cart()->count(),
             'avatar' => $user->avatar(),
         ]);
@@ -103,6 +106,26 @@ class HomeController extends Controller
 
     public function addCourseToCart(Request $request)
     {
+        // dd($request->all());
+
+        if ($request->item_type) {
+            foreach ($request->bookings as $item) {
+                $booking = HotelBooking::findOrFail($item);
+                Cart::create([
+                    'passport_id' => $request->user()->id,
+                    'item_type' => $request->item_type,
+                    'item_id' => $booking->id,
+                    'expiration_date' => today()->addHours(env('EXPIRATION_DATE', 48)),
+                    'title' => sprintf('%d Days', $booking->days),
+                    'starts_on' => null,
+                    'price' => $booking->price,
+                    'days' => $booking->days,
+                ]);
+
+                return back()->with('success', title_case($request->item_type).' added to the cart');
+            }
+        }
+
         foreach ($request->courses as $item) {
             if ($request->item_type == 'courses') {
                 $course = Course::findOrFail($item);
@@ -146,11 +169,13 @@ class HomeController extends Controller
     {
         $passport = $request->user();
 
+        $amount = str_replace(',', '', $request->amount);
+
         $debug = env('APP_DEBUG');
         if ($debug) {
             $url = "https://test.oppwa.com/v1/checkouts";
             $data = "entityId=8a8294174d0595bb014d05d82e5b01d2".
-                    "&amount=$request->amount".
+                    "&amount=$amount".
                     "&currency=EUR".
                     "&paymentType=DB";
         } else {
@@ -158,8 +183,8 @@ class HomeController extends Controller
             $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
                 '&authentication.password=qfERPN7gAA' .
                 '&authentication.entityId=8ac9a4ca6561110c01657c8adde4629e' .
-                '&amount='.$request->amount .
-                '&currency=SAR' .
+                '&amount='.$amount .
+                '&currency='.env('CURRENCY') .
                 '&merchantTransactionId='.$passport->id .
                 '&customer.merchantCustomerId='.$passport->id .
                 '&customer.email='.$passport->email .
@@ -190,14 +215,15 @@ class HomeController extends Controller
         if (isset($response->id)) {
             return view('payment', [
                 'checkoutId' => $response->id, 
-                'currency' => 'SAR',
-                'amount_formated' => number_format($request->amount, 2 , '.', ','),
-                'amount' => $request->amount,
+                'currency' => env('CURRENCY'),
+                'amount_formated' => number_format($amount, 2 , '.', ','),
+                'amount' => $amount,
             ]);
         }
 
         if (isset($response)) {
             if (isset($response->result)) {
+                // dd($response->result);
                 return back()->with('error', sprintf('%s : %s', $response->result->code, $response->result->description));   
             }
         }
@@ -301,6 +327,10 @@ class HomeController extends Controller
 
                     $passport->wetlabs()->attach($cart->item_id);
                 }
+
+                if ($cart->item_type == 'booking') {
+                    $passport->hotelBookings()->attach($cart->item_id);
+                }
             }
 
             $passport->cart()->delete();
@@ -321,6 +351,13 @@ class HomeController extends Controller
     public function printOrder(Order $order)
     {
         $passport = auth()->user();
+        abort_if(!$passport->orders->contains($order), 403);
         return view('invoice', ['order' => $order]);
+    }
+
+    public function listOrders()
+    {
+        $passport = auth()->user();
+        return view('orders', ['orders' => $passport->orders()->paginate(env('PAGE'))]);
     }
 }

@@ -70,6 +70,11 @@ class Passport extends Authenticatable
         return $this->belongsToMany(WetLab::class, 'passport_wetlab', 'passport_id', 'wetlab_id');
     }
 
+    public function hotelBookings()
+    {
+        return $this->belongsToMany(HotelBooking::class);
+    }
+
     public function cart()
     {
         return $this->hasMany(Cart::class);

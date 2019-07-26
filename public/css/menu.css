@@ -127,6 +127,8 @@ nav ul ul ul li {
 li > a:after { content:  ' +'; }
 li > a:only-child:after { content: ''; }
 
+#logout{display: block;}
+#menu_logout{display: none;}
 
 /* Media Queries
 --------------------------------------------- */
@@ -231,15 +233,17 @@ li > a:only-child:after { content: ''; }
 		/* has to be the same number as the "width" of "nav ul ul li" */ 
 
 	}
-
 }
 
-@media all and (max-width : 330px) {
+/* It was 330px and edited to 480px */
+@media all and (max-width : 480px) {
 
 	nav ul li {
 		display:block;
 		width: 94%;
 	}
 
+	#logout{display: none;}
+	#menu_logout{display: block;}
 }
 	 	

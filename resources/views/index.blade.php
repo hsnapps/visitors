@@ -67,6 +67,7 @@
                 </tbody>
             </table>
             <button data-toggle="modal" data-target="#user-profile-edit" class="btn btn-primary">Edit</button>
+            <a href="{{ route('order-list') }}" class="btn btn-primary text-uppercase">my orders</a>
         </div>
         <div class="col-md-8 course-edit-container">
             <table class="course-list-container" cellpadding="20px" cellspacing="20px">
@@ -91,6 +92,19 @@
                     @each('components.wetlabs_list', $wetlabs, 'wetlab', 'components.wetlabs_empty')
                 </tbody>
             </table>
+
+            <table class="course-list-container">
+                <tbody>
+                    <tr>
+                        <th>
+                            <h2>My Bookings</h2>
+                        </th>
+                        <th><a href="" data-toggle="modal" data-target="#booking-adding-modal" class=" btn-primary">Add</a></th>
+                    </tr>
+                    @each('components.bookings_list', $bookings, 'b', 'components.bookings_empty')
+                </tbody>
+            </table>
+
         </div>
     </div>
 </div>
@@ -99,6 +113,7 @@
     @include('modals.profile_edit')
     @include('modals.course_adding')
     @include('modals.wetlab_adding')
+    @include('modals.booking_adding')
 
     @php
         $cart_count = auth()->user()->cart()->count();

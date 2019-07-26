@@ -22,3 +22,4 @@ Route::post('/payment', 'HomeController@renderPaymentForm')->name('prepare-payme
 Route::post('/pay', 'HomeController@pay')->name('pay');
 Route::get('/shopperResultUrl', 'HomeController@paymentStatus')->name('payment-result');
 Route::get('/print/{order}', 'HomeController@printOrder')->name('order-print');
+Route::get('/orders', 'HomeController@listOrders')->name('order-list');

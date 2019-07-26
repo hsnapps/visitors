@@ -7,19 +7,19 @@
                 <div class="row">
                     <form action="{{ route('add-course-to-cart') }}" method="POST">
                         <div class="form-row">
+                            <label for="course-category">Choose Wetlab Category</label>
                             <div class="form-group col-md-12">
-                                <label for="course-title">Wetlab Title</label>
-                                <input type="text" class="form-control" id="course-title" placeholder="Enter Course Title">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="course-category">Choose Wetlab Category</label>
-                                <select name="courses[]" multiple="multiple" class="2col active">
-                                    @foreach ($wetlabs_list as $wetlab)
-                                    <option value="{{ $wetlab->id }}">{{ $wetlab->name }}</option>    
-                                    @endforeach                                                        
-                                </select>
+                                @foreach ($wetlabs_list as $wetlab)
+                                <div class="form-group col-md-6">
+                                    <div class="custom-control custom-checkbox">
+                                        <input name="courses[]" type="checkbox" class="custom-control-input" value="{{ $wetlab->id }}">
+                                        <label class="custom-control-label" for="customCheck1">{{ $wetlab->name }}</label>
+                                    </div>
+                                    <small id="passwordHelpBlock" class="form-text text-muted text-uppercase">
+                                        {{ sprintf('Starts on %s. available seats %d', $wetlab->starts_on->format('F j, Y'), $wetlab->seats) }}
+                                    </small>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="form-row col-md-12">

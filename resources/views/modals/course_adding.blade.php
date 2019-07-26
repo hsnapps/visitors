@@ -6,25 +6,19 @@
             <div class="modal-body">
                 <div class="row">
                     <form action="{{ route('add-course-to-cart') }}" method="POST">
+                        <label for="course-category">Choose Course Category</label>
                         <div class="form-row">
+                            @foreach ($courses_list as $course)
                             <div class="form-group col-md-6">
-                                <label for="course-title">Course Title</label>
-                                <input type="text" class="form-control" id="course-title" placeholder="Enter Course Title">
+                                <div class="custom-control custom-checkbox">
+                                    <input name="courses[]" type="checkbox" class="custom-control-input" value="{{ $course->id }}">
+                                    <label class="custom-control-label" for="customCheck1">{{ $course->name }}</label>
+                                </div>
+                                <small id="passwordHelpBlock" class="form-text text-muted text-uppercase">
+                                    {{ sprintf('Starts on %s. available seats %d', $course->starts_on->format('F j, Y'), $course->seats) }}
+                                </small>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="course-date">Course Date</label>
-                                <input type="date" class="form-control" id="course-date" placeholder="Enter Course Date">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="course-category">Choose Course Category</label>
-                                <select name="courses[]" multiple="multiple" class="2col active">
-                                    @foreach ($courses_list as $course)
-                                    <option value="{{ $course->id }}">{{ $course->name }}</option>    
-                                    @endforeach
-                                </select>
-                            </div>
+                            @endforeach
                         </div>
                         <div class="form-row col-md-12">
                             <button type="submit" class="btn btn-primary">Submit</button>

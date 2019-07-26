@@ -71,6 +71,7 @@
                 <li><a href="#">Courses</a></li>
                 <li><a href="#">Fees</a></li>
                 <li><a href="contact.html">Contact</a></li>
+                <li id="menu_logout"><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
             </ul>
 
             <a id="logout" class="btn btn-link btn-lg" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-3x fa-sign-out text-danger"></i></a>
