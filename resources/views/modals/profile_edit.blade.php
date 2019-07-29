@@ -8,6 +8,17 @@
                         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="title">Title</label>
+                                    <select name="title" id="title" class="form-control">
+                                        @foreach (App\PassportTitle::all() as $title)
+                                        <option {{ $title->id == $user->passprt_title_id ? 'selected' : '' }} value="{{ $title->id }}">{{ $title->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="first_name">First Name</label>
                                     <input type="text" class="form-control" name="first_name" placeholder="Your First Name" value="{{ $user->first_name }}" required>
@@ -28,7 +39,6 @@
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" name="email" placeholder="Your Email" value="{{ $user->email }}">
                                 </div>
-    
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">

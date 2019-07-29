@@ -37,10 +37,9 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         $courses_ids = $user->courses()->get()->map(function ($item) { return $item->id; })->toArray();
-        $coursesList = Course::whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
+        $coursesList = $user->passportTitle->courses()->whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
-        $wetlabsList = WetLab::whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
-        // $bookings_ids = $user->hotelBookings()->get()->map(function ($item) { return $item->id; })->toArray();
+        $wetlabsList = $user->passportTitle->wetLabs()->whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $bookingList = HotelBooking::all();
 
         return view('index', [
@@ -70,6 +69,7 @@ class HomeController extends Controller
             ],
         ]);
 
+        $user->passprt_title_id = $request->title;
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;
         $user->last_name = $request->last_name;

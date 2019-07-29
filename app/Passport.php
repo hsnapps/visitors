@@ -17,7 +17,7 @@ class Passport extends Authenticatable
     protected $fillable = [
         'event_id',
         'admin_id',
-        'title',
+        'passprt_title_id',
         'first_name',
         'middle_name',
         'last_name',
@@ -83,5 +83,10 @@ class Passport extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function passportTitle()
+    {
+        return $this->belongsTo(PassportTitle::class, 'passprt_title_id', 'id');
     }
 }

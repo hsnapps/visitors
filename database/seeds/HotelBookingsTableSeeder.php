@@ -12,13 +12,10 @@ class HotelBookingsTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
-
-        for ($i=0; $i < 30; $i++) { 
-            $days = rand(1, 5);
+        for ($day=1; $day < 6; $day++) { 
             HotelBooking::create([
-                'days' => $days,
-                'price' => $days * 250,
+                'days' => $day,
+                'price' => $day * 250,
             ]);
         }
     }

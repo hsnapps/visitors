@@ -3,3 +3,7 @@
     right: 20px;
     top: -18px;
 }
+
+@media only screen and (max-width: 1300px) {
+    #logout {top: 40px;}
+}

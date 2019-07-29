@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Faker\Factory;
 use App\Passport;
 use App\Course;
 use App\WetLab;
+use App\PassportTitle;
+use App\HotelBooking;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,8 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $passport = Passport::create([
-            'title' => 'Phd.',
+        PassportTitle::create(['name' => 'Phd.']);
+        PassportTitle::create(['name' => 'Dr.']);
+        PassportTitle::create(['name' => 'Std.']);
+
+        Passport::create([
+            'passprt_title_id' => 1,
             'first_name' => 'Hassan',
             'last_name' => 'Baabdullah',
             'work_place' => 'KFAFAH',
@@ -29,6 +34,30 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $faker = Factory::create();
+
+        Passport::create([
+            'passprt_title_id' => 2,
+            'first_name' => $faker->firstNameMale,
+            'last_name' => $faker->lastName,
+            'work_place' => $faker->company,
+            'country' => 'SA',
+            'mobile_no' => $faker->phoneNumber,
+            'profession' => $faker->words(2, true),
+            'email' => $faker->freeEmail,
+            'password' => bcrypt('1234'),
+        ]);
+
+        Passport::create([
+            'passprt_title_id' => 3,
+            'first_name' => $faker->firstNameMale,
+            'last_name' => $faker->lastName,
+            'work_place' => $faker->company,
+            'country' => 'SA',
+            'mobile_no' => $faker->phoneNumber,
+            'profession' => $faker->words(2, true),
+            'email' => $faker->freeEmail,
+            'password' => bcrypt('1234'),
+        ]);
 
         for ($i=ord('A'); $i < ord('I'); $i++) { 
             Course::create([
@@ -50,11 +79,11 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $course = Course::find(1);
-
-        DB::insert('INSERT INTO course_passport (course_id, passport_id) values (?, ?)', [
-            $passport->id,
-            $course->id
-        ]);
+        for ($day=1; $day < 6; $day++) { 
+            HotelBooking::create([
+                'days' => $day,
+                'price' => $day * 250,
+            ]);
+        }
     }
 }

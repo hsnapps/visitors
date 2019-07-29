@@ -45,7 +45,7 @@
                             <h3>Name</h3>
                         </td>
                         <td>
-                            <p>{{ $user->fullName() }}</p>
+                            <p>{{ sprintf('%s %s', $user->passportTitle->name, $user->fullName()) }}</p>
                         </td>
                     </tr>
                     <tr>
