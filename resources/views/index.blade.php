@@ -38,14 +38,14 @@
             <table class="user-profile-table" cellspacing="5px" cellpadding="" width="100%">
                 <tbody>
                     <tr>
-                        <td colspan="2"><img src="{{ $avatar }}" class="profile-img"></td>
+                        <td colspan="2"><img src="{{ $user->getAvatar() }}" class="profile-img"></td>
                     </tr>
                     <tr>
                         <td>
                             <h3>Name</h3>
                         </td>
                         <td>
-                            <p>{{ sprintf('%s %s', $user->passportTitle->name, $user->fullName()) }}</p>
+                            <p>{{ $user->fullName() }}</p>
                         </td>
                     </tr>
                     <tr>

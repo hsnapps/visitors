@@ -8,6 +8,8 @@
   <h3>Amount: {{ $currency.' '.$amount_formated }}</h3>
 </div>
 <form action="{{ route('payment-result') }}" class="paymentWidgets" data-brands="VISA MASTER MADA"></form>
+
+@include('components.back')
 @endsection
  
 @push('scripts')

@@ -9,9 +9,9 @@
                             {{ csrf_field() }}
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="title">Title</label>
-                                    <select name="title" id="title" class="form-control">
-                                        @foreach (App\PassportTitle::all() as $title)
+                                    <label for="title">Category</label>
+                                    <select disabled name="title" id="title" class="form-control">
+                                        @foreach (App\Category::all() as $title)
                                         <option {{ $title->id == $user->passprt_title_id ? 'selected' : '' }} value="{{ $title->id }}">{{ $title->name }}</option>
                                         @endforeach
                                     </select>

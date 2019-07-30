@@ -7,6 +7,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use App\Code\Tools;
 use App\Course;
 use App\WetLab;
 use App\Cart;
@@ -37,9 +39,9 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         $courses_ids = $user->courses()->get()->map(function ($item) { return $item->id; })->toArray();
-        $coursesList = $user->passportTitle->courses()->whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
+        $coursesList = $user->category->courses()->whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
-        $wetlabsList = $user->passportTitle->wetLabs()->whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
+        $wetlabsList = $user->category->wetLabs()->whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $bookingList = HotelBooking::all();
 
         return view('index', [
@@ -53,7 +55,7 @@ class HomeController extends Controller
             'bookings_list' => $bookingList,
 
             'cart_count' => $user->cart()->count(),
-            'avatar' => $user->avatar(),
+            // 'avatar' => $user->getAvatar(),
         ]);
     }
 
@@ -69,7 +71,7 @@ class HomeController extends Controller
             ],
         ]);
 
-        $user->passprt_title_id = $request->title;
+        // $user->category = $request->title;
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;
         $user->last_name = $request->last_name;
@@ -83,7 +85,10 @@ class HomeController extends Controller
             $avatar = $request->file('avatar');
             if ($avatar->isValid()) {
                 $dir = 'avatars';
-                $avatar->storeAs($dir, $user->id.'.png');
+                $fileName = Tools::generateRandomString(20);
+                $avatar->storeAs($dir, $fileName.'.png');
+                Storage::delete(sprintf('avatars/%s.png', $user->avatar));
+                $user->avatar = $fileName;
             }
         }
 
@@ -170,21 +175,38 @@ class HomeController extends Controller
         $passport = $request->user();
 
         $amount = str_replace(',', '', $request->amount);
+        $currency = env('CURRENCY');
 
         $debug = env('APP_DEBUG');
         if ($debug) {
             $url = "https://test.oppwa.com/v1/checkouts";
-            $data = "entityId=8a8294174d0595bb014d05d82e5b01d2".
-                    "&amount=$amount".
-                    "&currency=EUR".
-                    "&paymentType=DB";
+            // $data = "entityId=8a8294174d0595bb014d05d82e5b01d2".
+            //         "&amount=$amount".
+            //         "&currency=$currency".
+            //         "&paymentType=DB";
         } else {
             $url = 'https://oppwa.com/v1/checkouts';
-            $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
+            // $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
+            //     '&authentication.password=qfERPN7gAA' .
+            //     '&authentication.entityId=8ac9a4ca6561110c01657c8adde4629e' .
+            //     '&amount='.$amount .
+            //     '&currency='.$currency .
+            //     '&merchantTransactionId='.$passport->id .
+            //     '&customer.merchantCustomerId='.$passport->id .
+            //     '&customer.email='.$passport->email .
+            //     '&customer.givenName='.$passport->first_name .
+            //     '&customer.surname='.$passport->last_name .
+            //     '&paymentType=DB' .
+            //     '&billing.country='.$passport->country .
+            //     '&billing.city='.$passport->country .
+            //     '&billing.street1='.$passport->country;
+        }
+
+        $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
                 '&authentication.password=qfERPN7gAA' .
-                '&authentication.entityId=8ac9a4ca6561110c01657c8adde4629e' .
+                '&authentication.entityId=8a8294174d0595bb014d05d82e5b01d2' .
                 '&amount='.$amount .
-                '&currency='.env('CURRENCY') .
+                '&currency='.$currency .
                 '&merchantTransactionId='.$passport->id .
                 '&customer.merchantCustomerId='.$passport->id .
                 '&customer.email='.$passport->email .
@@ -194,7 +216,6 @@ class HomeController extends Controller
                 '&billing.country='.$passport->country .
                 '&billing.city='.$passport->country .
                 '&billing.street1='.$passport->country;
-        }
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

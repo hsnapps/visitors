@@ -17,7 +17,7 @@ class Passport extends Authenticatable
     protected $fillable = [
         'event_id',
         'admin_id',
-        'passprt_title_id',
+        'category_id',
         'first_name',
         'middle_name',
         'last_name',
@@ -40,6 +40,7 @@ class Passport extends Authenticatable
         'wet_lab_reg',
         'type_of_payment',
         'status',
+        'avatar'
     ];
 
     protected $hidden = [
@@ -51,11 +52,11 @@ class Passport extends Authenticatable
         return sprintf('%s %s', $this->first_name, $this->last_name);
     }
 
-    public function avatar()
+    public function getAvatar()
     {
-        $path = public_path('avatars/' . $this->id . '.png');
+        $path = public_path('avatars/' . $this->avatar . '.png');
         if (file_exists($path)) {
-            return url('avatars/' . $this->id . '.png');
+            return url('avatars/' . $this->avatar . '.png');
         }
         return url('avatars/empty.png');
     }
@@ -85,8 +86,8 @@ class Passport extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function passportTitle()
+    public function category()
     {
-        return $this->belongsTo(PassportTitle::class, 'passprt_title_id', 'id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 }
