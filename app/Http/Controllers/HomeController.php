@@ -173,38 +173,22 @@ class HomeController extends Controller
     public function renderPaymentForm(Request $request) 
     {
         $passport = $request->user();
-
-        $amount = str_replace(',', '', $request->amount);
         $currency = env('CURRENCY');
+        $_amount = str_replace(',', '', $request->amount);
+        $__amount = $_amount / env('CURRENCY_RATE');
+        $amount = round($__amount, 2);
 
         $debug = env('APP_DEBUG');
         if ($debug) {
             $url = "https://test.oppwa.com/v1/checkouts";
-            // $data = "entityId=8a8294174d0595bb014d05d82e5b01d2".
-            //         "&amount=$amount".
-            //         "&currency=$currency".
-            //         "&paymentType=DB";
         } else {
             $url = 'https://oppwa.com/v1/checkouts';
-            // $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
-            //     '&authentication.password=qfERPN7gAA' .
-            //     '&authentication.entityId=8ac9a4ca6561110c01657c8adde4629e' .
-            //     '&amount='.$amount .
-            //     '&currency='.$currency .
-            //     '&merchantTransactionId='.$passport->id .
-            //     '&customer.merchantCustomerId='.$passport->id .
-            //     '&customer.email='.$passport->email .
-            //     '&customer.givenName='.$passport->first_name .
-            //     '&customer.surname='.$passport->last_name .
-            //     '&paymentType=DB' .
-            //     '&billing.country='.$passport->country .
-            //     '&billing.city='.$passport->country .
-            //     '&billing.street1='.$passport->country;
         }
 
         $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
                 '&authentication.password=qfERPN7gAA' .
                 '&authentication.entityId=8a8294174d0595bb014d05d82e5b01d2' .
+                '&testMode=EXTERNAL' .
                 '&amount='.$amount .
                 '&currency='.$currency .
                 '&merchantTransactionId='.$passport->id .
@@ -212,7 +196,7 @@ class HomeController extends Controller
                 '&customer.email='.$passport->email .
                 '&customer.givenName='.$passport->first_name .
                 '&customer.surname='.$passport->last_name .
-                '&paymentType=DB' .
+                '&paymentType=CD' .
                 '&billing.country='.$passport->country .
                 '&billing.city='.$passport->country .
                 '&billing.street1='.$passport->country;
@@ -244,7 +228,7 @@ class HomeController extends Controller
 
         if (isset($response)) {
             if (isset($response->result)) {
-                // dd($response->result);
+                logger(json_encode($response->result));
                 return back()->with('error', sprintf('%s : %s', $response->result->code, $response->result->description));   
             }
         }
@@ -296,7 +280,7 @@ class HomeController extends Controller
             logger($responseData);
         }
 
-        if ($response->result->code == $successValue) {
+        if (starts_with($response->result->code, '000.')) {
             DB::beginTransaction();
 
             $subtotal = $passport->cart->sum('price');

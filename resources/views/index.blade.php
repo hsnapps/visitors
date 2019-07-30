@@ -17,6 +17,10 @@
     .float:hover{color:#d0e0d4;}
     .floating-btn{margin-top: 15px;}
     .floating-btn:hover {color:#d0e0d4;}
+    .price{
+        font-size: 0.75em;
+        color: #555963;
+    }
 </style>
 @endpush
 
@@ -119,6 +123,10 @@
         $cart_count = auth()->user()->cart()->count();
     @endphp
     @includeWhen($cart_count > 0, 'components.cart', ['cart_count' => $cart_count])
+
+    @if (env('APP_DEBUG'))
+        
+    @endif
 @endsection
 
 @push('scripts')

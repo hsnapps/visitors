@@ -11,8 +11,8 @@
                                 @foreach ($bookings_list as $booking)
                                 <div class="form-group col-md-3">
                                     <div class="custom-control custom-checkbox">
-                                        <input name="bookings[]" type="checkbox" class="custom-control-input" value="{{ $booking->id }}">
-                                        <label class="custom-control-label" for="customCheck1">{{ sprintf('%d Days', $booking->days) }}</label>
+                                        <input name="bookings[]" type="radio" class="custom-control-input" value="{{ $booking->id }}">
+                                        <label class="custom-control-label" for="customCheck1">{{ sprintf('%d Days', $booking->days) }} <span class="price">SAR {{ $booking->price }}</span></label>
                                     </div>
                                     <small class="form-text text-muted text-uppercase">
                                         {{ sprintf('Price %.2f', $booking->price) }}

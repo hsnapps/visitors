@@ -7,7 +7,7 @@
 <div class="well well-sm">
   <h3>Amount: {{ $currency.' '.$amount_formated }}</h3>
 </div>
-<form action="{{ route('payment-result') }}" class="paymentWidgets" data-brands="VISA MASTER MADA"></form>
+<form action="{{ route('payment-result') }}" class="paymentWidgets" data-brands="VISA MASTER"></form>
 
 @include('components.back')
 @endsection

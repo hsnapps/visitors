@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               10.1.35-MariaDB - mariadb.org binary distribution
+-- Server version:               10.1.37-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win32
--- HeidiSQL Version:             10.2.0.5599
+-- HeidiSQL Version:             10.2.0.5656
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -40,13 +40,24 @@ CREATE TABLE IF NOT EXISTS `carts` (
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 
+-- Dumping structure for table eosksaco_rsos.categories
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table eosksaco_rsos.categories: ~0 rows (approximately)
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+
 -- Dumping structure for table eosksaco_rsos.category_course
 CREATE TABLE IF NOT EXISTS `category_course` (
   `category_id` int(10) unsigned NOT NULL,
   `course_id` int(10) unsigned NOT NULL,
   KEY `category_course_course_id_foreign` (`course_id`),
   KEY `category_course_category_id_foreign` (`category_id`),
-  CONSTRAINT `category_course_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `passport_titles` (`id`),
+  CONSTRAINT `category_course_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
   CONSTRAINT `category_course_course_id_foreign` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -72,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `category_wet_lab` (
   `wet_lab_id` int(10) unsigned NOT NULL,
   KEY `category_wet_lab_wet_lab_id_foreign` (`wet_lab_id`),
   KEY `category_wet_lab_category_id_foreign` (`category_id`),
-  CONSTRAINT `category_wet_lab_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `passport_titles` (`id`),
+  CONSTRAINT `category_wet_lab_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
   CONSTRAINT `category_wet_lab_wet_lab_id_foreign` FOREIGN KEY (`wet_lab_id`) REFERENCES `wet_labs` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -193,9 +204,9 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table eosksaco_rsos.migrations: ~25 rows (approximately)
+-- Dumping data for table eosksaco_rsos.migrations: ~27 rows (approximately)
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2019_04_12_091042_create_passports_table', 1),
@@ -222,7 +233,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(22, '2019_07_29_052027_add_course_category', 2),
 	(24, '2019_07_29_063202_remove_category', 3),
 	(27, '2019_07_29_063526_create_table_category_course', 4),
-	(28, '2019_07_29_063546_create_table_category_wet_lab', 4);
+	(28, '2019_07_29_063546_create_table_category_wet_lab', 4),
+	(29, '2019_07_30_061830_create_categories_table', 5),
+	(30, '2019_07_30_064528_add_avater_to_passport', 5);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
 -- Dumping structure for table eosksaco_rsos.orders
@@ -271,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `passports` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `event_id` int(11) NOT NULL DEFAULT '0',
   `admin_id` int(11) NOT NULL DEFAULT '0',
-  `passprt_title_id` int(10) unsigned NOT NULL,
+  `category_id` int(10) unsigned NOT NULL,
   `first_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `middle_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -298,34 +311,18 @@ CREATE TABLE IF NOT EXISTS `passports` (
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `avatar` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `passports_email_unique` (`email`),
-  KEY `passports_passprt_title_id_foreign` (`passprt_title_id`),
-  CONSTRAINT `passports_passprt_title_id_foreign` FOREIGN KEY (`passprt_title_id`) REFERENCES `passport_titles` (`id`)
+  UNIQUE KEY `passports_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table eosksaco_rsos.passports: ~3 rows (approximately)
 /*!40000 ALTER TABLE `passports` DISABLE KEYS */;
-INSERT INTO `passports` (`id`, `event_id`, `admin_id`, `passprt_title_id`, `first_name`, `middle_name`, `last_name`, `work_place`, `country`, `bar_code`, `code`, `amount`, `mobile_no`, `profession`, `specialist`, `sfch_number`, `sfch_image`, `bank_recipt`, `email`, `expire_date`, `approved`, `payment`, `conference_reg`, `wet_lab_reg`, `type_of_payment`, `status`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 0, 0, 1, 'Hassan', NULL, 'Baabdullah', 'KFAFAH', 'SA', NULL, NULL, NULL, '966569163852', 'BCS, PMP', NULL, NULL, NULL, NULL, 'prog.hasan@gmail.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$EDug9wKHFjQhRp.i9wwcr.X/uTwgg6hajzTuF8N3nU2AtafA/u072', 'glq0MZIPIPMafY6jf6ws95q0sfMcFl12ew1fZo5ugPV6IXmI39rddf4GyUSC', '2019-07-29 05:25:32', '2019-07-29 05:25:32'),
-	(2, 0, 0, 2, 'Alf', NULL, 'Rutherford', 'Shields, Nikolaus and Terry', 'SA', NULL, NULL, NULL, '+1-598-567-1047', 'culpa qui', NULL, NULL, NULL, NULL, 'little.aileen@yahoo.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$c9dr9XtS/mhePwtkwZR1reyeUJo516OU2YvlWaaOffd0rt257D1WS', 'dYUOnFkhViV4ccRQCPCLeiUo1dTWJ0MUDnHqERCYFGDQwh2q1pnFpjvOBTmb', '2019-07-29 05:25:32', '2019-07-29 05:25:32'),
-	(3, 0, 0, 3, 'Mac', NULL, 'McKenzie', 'O\'Conner, Graham and Maggio', 'SA', NULL, NULL, NULL, '1-645-534-9148 x32285', 'voluptas soluta', NULL, NULL, NULL, NULL, 'francisco.murazik@hotmail.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$FSqFe.cvrQS24sSRb8k6l.RPJB7dRH/WltsCJsAx8RWlY59LPm/r2', 'dhpehm1UBXsQYRsdbtd7Py2eXuDMApvfgyzcrHV61lFNpC5kSF1uC5GGOQKW', '2019-07-29 05:25:32', '2019-07-29 08:29:05');
+INSERT INTO `passports` (`id`, `event_id`, `admin_id`, `category_id`, `first_name`, `middle_name`, `last_name`, `work_place`, `country`, `bar_code`, `code`, `amount`, `mobile_no`, `profession`, `specialist`, `sfch_number`, `sfch_image`, `bank_recipt`, `email`, `expire_date`, `approved`, `payment`, `conference_reg`, `wet_lab_reg`, `type_of_payment`, `status`, `password`, `remember_token`, `created_at`, `updated_at`, `avatar`) VALUES
+	(1, 0, 0, 0, 'Hassan', NULL, 'Baabdullah', 'KFAFAH', 'SA', NULL, NULL, NULL, '966569163852', 'BCS, PMP', NULL, NULL, NULL, NULL, 'prog.hasan@gmail.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$EDug9wKHFjQhRp.i9wwcr.X/uTwgg6hajzTuF8N3nU2AtafA/u072', 'glq0MZIPIPMafY6jf6ws95q0sfMcFl12ew1fZo5ugPV6IXmI39rddf4GyUSC', '2019-07-29 05:25:32', '2019-07-29 05:25:32', ''),
+	(2, 0, 0, 0, 'Alf', NULL, 'Rutherford', 'Shields, Nikolaus and Terry', 'SA', NULL, NULL, NULL, '+1-598-567-1047', 'culpa qui', NULL, NULL, NULL, NULL, 'little.aileen@yahoo.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$c9dr9XtS/mhePwtkwZR1reyeUJo516OU2YvlWaaOffd0rt257D1WS', 'dYUOnFkhViV4ccRQCPCLeiUo1dTWJ0MUDnHqERCYFGDQwh2q1pnFpjvOBTmb', '2019-07-29 05:25:32', '2019-07-29 05:25:32', ''),
+	(3, 0, 0, 0, 'Mac', NULL, 'McKenzie', 'O\'Conner, Graham and Maggio', 'SA', NULL, NULL, NULL, '1-645-534-9148 x32285', 'voluptas soluta', NULL, NULL, NULL, NULL, 'francisco.murazik@hotmail.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$FSqFe.cvrQS24sSRb8k6l.RPJB7dRH/WltsCJsAx8RWlY59LPm/r2', 'dhpehm1UBXsQYRsdbtd7Py2eXuDMApvfgyzcrHV61lFNpC5kSF1uC5GGOQKW', '2019-07-29 05:25:32', '2019-07-29 08:29:05', '');
 /*!40000 ALTER TABLE `passports` ENABLE KEYS */;
-
--- Dumping structure for table eosksaco_rsos.passport_titles
-CREATE TABLE IF NOT EXISTS `passport_titles` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dumping data for table eosksaco_rsos.passport_titles: ~3 rows (approximately)
-/*!40000 ALTER TABLE `passport_titles` DISABLE KEYS */;
-INSERT INTO `passport_titles` (`id`, `name`) VALUES
-	(1, 'Phd.'),
-	(2, 'Dr.'),
-	(3, 'Std.');
-/*!40000 ALTER TABLE `passport_titles` ENABLE KEYS */;
 
 -- Dumping structure for table eosksaco_rsos.passport_wetlab
 CREATE TABLE IF NOT EXISTS `passport_wetlab` (

@@ -13,7 +13,7 @@
                                 <div class="form-group col-md-6">
                                     <div class="custom-control custom-checkbox">
                                         <input name="courses[]" type="checkbox" class="custom-control-input" value="{{ $wetlab->id }}">
-                                        <label class="custom-control-label" for="customCheck1">{{ $wetlab->name }}</label>
+                                        <label class="custom-control-label" for="customCheck1">{{ $wetlab->name }} <span class="price">SAR {{ $wetlab->price }}</span></label>
                                     </div>
                                     <small id="passwordHelpBlock" class="form-text text-muted text-uppercase">
                                         {{ sprintf('Starts on %s. available seats %d', $wetlab->starts_on->format('F j, Y'), $wetlab->seats) }}
