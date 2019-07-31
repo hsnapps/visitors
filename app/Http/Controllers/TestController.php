@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
 use App\Order;
 
 class TestController extends Controller
@@ -19,14 +21,6 @@ class TestController extends Controller
             $order = Order::first();
         } else {
             $order = new Order();
-            $fillable = [
-                'passport_id',
-                'subtotal',
-                'payment_id',
-                'vat',
-                'amount',
-                'status',
-            ];
             $order->passport_id = $passport->id;
             $order->subtotal = 0;
             $order->payment_id = 0;
@@ -34,8 +28,8 @@ class TestController extends Controller
             $order->amount = 0;
             $order->status = true;
         }
-        Mail::to($passport)->send(new OrderPlaced($order));
+        Mail::to($passport)->send(new TestMail());
 
-        return redirect()->route('home');
+        return back()->with('success', 'Email sent successfully!');
     }
 }

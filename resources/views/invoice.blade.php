@@ -70,7 +70,7 @@
                                     <tbody>
                                         @foreach ($order->items as $item)
                                         <tr>
-                                            <td>{{ $loop->index }}</td>
+                                            <td>{{ $loop->index + 1 }}</td>
                                             <td>{{ title_case($item->item_type) }}</td>
                                             <td>{{ $item->item_name }}</td>
                                             <td>SAR {{ $item->item_price }}</td>

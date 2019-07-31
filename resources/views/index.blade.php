@@ -72,6 +72,9 @@
             </table>
             <button data-toggle="modal" data-target="#user-profile-edit" class="btn btn-primary">Edit</button>
             <a href="{{ route('order-list') }}" class="btn btn-primary text-uppercase">my orders</a>
+            @if (env('APP_DEBUG'))
+                @include('components.test_mail')
+            @endif
         </div>
         <div class="col-md-8 course-edit-container">
             <table class="course-list-container" cellpadding="20px" cellspacing="20px">

@@ -246,12 +246,12 @@ class HomeController extends Controller
         $entityId = '8ac9a4ca6561110c01657c8adde4629e';
         $userId = '8ac9a4ca6561110c01657c8a9c8b629a';
         $password = 'qfERPN7gAA';
-        $successValue = '000.000.000';
+        // $successValue = '000.000.000';
         $order = null;
 
         $debug = env('APP_DEBUG');
         if ($debug) {
-            $successValue = '000.100.110';
+            // $successValue = '000.100.110';
             $url = 'https://test.oppwa.com'.$request->resourcePath.'?authentication.entityId=8a8294174d0595bb014d05d82e5b01d2';
         } else {
             $url = 'https://oppwa.com'.$request->resourcePath;
@@ -340,14 +340,14 @@ class HomeController extends Controller
 
             $passport->cart()->delete();
 
-            DB::commit();
-
             Mail::to($passport)->send(new OrderPlaced($order));
+
+            DB::commit();
         }
         
         return view('receipt', [
             'order' => $order,
-            'success_value' => $successValue,
+            // 'success_value' => $successValue,
             'code' => $response->result->code,
             'description' => $response->result->description,
         ]);

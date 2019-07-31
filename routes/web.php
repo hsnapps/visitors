@@ -24,4 +24,4 @@ Route::get('/shopperResultUrl', 'HomeController@paymentStatus')->name('payment-r
 Route::get('/print/{order}', 'HomeController@printOrder')->name('order-print');
 Route::get('/orders', 'HomeController@listOrders')->name('order-list');
 
-Route::get('/test-mail', 'TestController@testMail')->name('test.mail');
+Route::post('/test-mail', 'TestController@testMail')->name('test.mail');
