@@ -177,7 +177,9 @@ class HomeController extends Controller
         $_amount = str_replace(',', '', $request->amount);
         $__amount = $_amount / env('CURRENCY_RATE');
         $amount = round($__amount, 2);
+        $ssl = !env('APP_DEBUG');
 
+        // 1. Prepare the checkout
         $debug = env('APP_DEBUG');
         if ($debug) {
             $url = "https://test.oppwa.com/v1/checkouts";
@@ -185,9 +187,9 @@ class HomeController extends Controller
             $url = 'https://oppwa.com/v1/checkouts';
         }
 
-        $data = 'authentication.userId=' . env('HYPERPAY_USER_ID') .
-                '&authentication.password=' . env('HYPERPAY_PASSWORD') . 
-                '&authentication.entityId=' . env('HYPERPAY_ENTITY_ID') . 
+        $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
+                '&authentication.password=qfERPN7gAA' . 
+                '&authentication.entityId=8ac9a4ca6561110c01657c8adde4629e' . 
                 '&amount='.$amount .
                 '&currency='.$currency .
                 '&merchantTransactionId='.$passport->id .
@@ -207,13 +209,15 @@ class HomeController extends Controller
         if ($debug) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization:Bearer OGE4Mjk0MTc0ZDA1OTViYjAxNGQwNWQ4MjllNzAxZDF8OVRuSlBjMm45aA=='));
         }
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // this should be set to true in production
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $ssl); // this should be set to true in production
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $responseData = curl_exec($ch);
         if(curl_errno($ch)) {
             return curl_error($ch);
         }
         curl_close($ch);
+
+        // dd($responseData);
         
         $response = json_decode($responseData);
         if (isset($response->id)) {
@@ -249,17 +253,19 @@ class HomeController extends Controller
         $userId = env('HYPERPAY_USER_ID');
         $password = env('qfERPN7gAA');
         $successValue = '000.000.000';
+        $pattern = env('MATCH');
         $order = null;
+        $ssl = !env('APP_DEBUG');
+        $checkoutId = $request->id;
+
+        // dd($request->all());
 
         $debug = env('APP_DEBUG');
         if ($debug) {
-            $successValue = '000.100.112';
-            $url = 'https://test.oppwa.com'.$request->resourcePath."?authentication.entityId=$entityId";
+            // $successValue = '000.100.112';
+            $url = 'https://test.oppwa.com/'.$request->resourcePath;
         } else {
-            $url = 'https://oppwa.com'.$request->resourcePath;
-            $url .= "?authentication.userId=$userId";
-            $url .=	"&authentication.password=$password";
-            $url .=	"&authentication.entityId=$entityId";
+            $url = 'https://oppwa.com/'.$request->resourcePath;
         }
 
         $ch = curl_init();
@@ -267,8 +273,9 @@ class HomeController extends Controller
         if($debug) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization:Bearer OGE4Mjk0MTc0ZDA1OTViYjAxNGQwNWQ4MjllNzAxZDF8OVRuSlBjMm45aA=='));
         }
+        
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $ssl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $responseData = curl_exec($ch);
         
@@ -282,7 +289,7 @@ class HomeController extends Controller
             logger($responseData);
         }
 
-        if ($response->result->code == $successValue) {
+        if (preg_match($pattern, $response->result->code)) {
             DB::beginTransaction();
 
             $subtotal = $passport->cart->sum('price');
@@ -348,14 +355,14 @@ class HomeController extends Controller
         } else {
             Payment::create([
                 'passport_id' => $passport->id,
-                'amount' => $response->amount,
+                'amount' => isset($response->amount) ? $response->amount : 0,
                 'online' => true,
-                'card_type' => $response->paymentBrand,
-                'card_holder' => $response->card->holder,
-                'card_expiration' => sprintf('%s-%s', $response->card->expiryMonth, $response->card->expiryYear),
-                'card_last_4' => $response->card->last4Digits,
-                'currency' => $response->currency,
-                'payment_result_id' => $response->id,
+                'card_type' => isset($response->paymentBrand) ? $response->paymentBrand : 'N/A',
+                'card_holder' => isset($response->card) ?  $response->card->holder : 'N/A',
+                'card_expiration' => isset($response->card) ? sprintf('%s-%s', $response->card->expiryMonth, $response->card->expiryYear) : 'N/A',
+                'card_last_4' =>  isset($response->card) ? $response->card->last4Digits : 'N/A',
+                'currency' => isset($response->currency) ? $response->currency : 'N/A',
+                'payment_result_id' => isset($response->id) ? $response->id : 'N/A',
                 'payment_result_code' => $response->result->code,
                 'payment_result_description' => $response->result->description,
             ]);

@@ -41,7 +41,7 @@
                 <td>{{ $item->title }}</td>
                 <td>{{ isset($item->starts_on) ? $item->starts_on->format('d/m/Y') : 'N/A' }}</td>
                 <td>{{ $item->days }}</td>
-                <td>${{ $item->price }}</td>
+                <td>{{ sprintf('%s %.2f', env('CURRENCY'), $item->price / env('CURRENCY_RATE')) }}</td>
                 <td>
                     <button class="uk-button uk-button-small uk-button-danger" type="button" onclick="document.getElementById('remove_{{ $item->id }}').submit();">
                         <span class="fa fa-trash"></span>

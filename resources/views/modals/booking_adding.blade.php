@@ -12,11 +12,8 @@
                                 <div class="form-group col-md-3">
                                     <div class="custom-control custom-checkbox">
                                         <input name="bookings[]" type="radio" class="custom-control-input" value="{{ $booking->id }}">
-                                        <label class="custom-control-label" for="customCheck1">{{ sprintf('%d Days', $booking->days) }} <span class="price">SAR {{ $booking->price }}</span></label>
+                                        <label class="custom-control-label" for="customCheck1">{{ sprintf('%d Days', $booking->days) }} <span class="price">{{ sprintf('%s %.2f', env('CURRENCY'), $booking->price / env('CURRENCY_RATE')) }}</span></label>
                                     </div>
-                                    <small class="form-text text-muted text-uppercase">
-                                        {{ sprintf('Price %.2f', $booking->price) }}
-                                    </small>
                                 </div>
                                 @endforeach
                             </div>

@@ -14,9 +14,9 @@
           <tr>
               <th></th>
               <th>Date</th>
-              <th>Subtotal</th>
-              <th>VAT</th>
-              <th>Amount</th>
+              <th>Subtotal <small>({{ env('CURRENCY') }})</small></th>
+              <th>VAT  <small>({{ env('CURRENCY') }})</small></th>
+              <th>Amount  <small>({{ env('CURRENCY') }})</small></th>
               <th>status</th>
           </tr>
           </thead>
