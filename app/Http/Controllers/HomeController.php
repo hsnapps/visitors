@@ -245,16 +245,16 @@ class HomeController extends Controller
     public function paymentStatus(Request $request)
     {
         $passport = $request->user();
-        $entityId = '8ac9a4ca6561110c01657c8adde4629e';
-        $userId = '8ac9a4ca6561110c01657c8a9c8b629a';
-        $password = 'qfERPN7gAA';
+        $entityId = env('HYPERPAY_ENTITY_ID');
+        $userId = env('HYPERPAY_USER_ID');
+        $password = env('qfERPN7gAA');
         $successValue = '000.000.000';
         $order = null;
 
         $debug = env('APP_DEBUG');
         if ($debug) {
             $successValue = '000.100.112';
-            $url = 'https://test.oppwa.com'.$request->resourcePath.'?authentication.entityId=8a8294174d0595bb014d05d82e5b01d2';
+            $url = 'https://test.oppwa.com'.$request->resourcePath."?authentication.entityId=$entityId";
         } else {
             $url = 'https://oppwa.com'.$request->resourcePath;
             $url .= "?authentication.userId=$userId";
