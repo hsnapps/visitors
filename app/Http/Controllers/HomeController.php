@@ -185,10 +185,9 @@ class HomeController extends Controller
             $url = 'https://oppwa.com/v1/checkouts';
         }
 
-        $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
-                '&authentication.password=qfERPN7gAA' .
-                '&authentication.entityId=8a8294174d0595bb014d05d82e5b01d2' .
-                // '&testMode=EXTERNAL' .
+        $data = 'authentication.userId=' . env('HYPERPAY_USER_ID') .
+                '&authentication.password=' . env('HYPERPAY_PASSWORD') . 
+                '&authentication.entityId=' . env('HYPERPAY_ENTITY_ID') . 
                 '&amount='.$amount .
                 '&currency='.$currency .
                 '&merchantTransactionId='.$passport->id .
@@ -219,7 +218,9 @@ class HomeController extends Controller
         $response = json_decode($responseData);
         if (isset($response->id)) {
             // logger($responseData);
+            
             return view('payment', [
+                // 'script_url' => $script_url,
                 'checkoutId' => $response->id, 
                 'currency' => env('CURRENCY'),
                 'amount_formated' => number_format($amount, 2 , '.', ','),
