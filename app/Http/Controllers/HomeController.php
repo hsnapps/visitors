@@ -188,7 +188,7 @@ class HomeController extends Controller
         $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
                 '&authentication.password=qfERPN7gAA' .
                 '&authentication.entityId=8a8294174d0595bb014d05d82e5b01d2' .
-                '&testMode=EXTERNAL' .
+                // '&testMode=EXTERNAL' .
                 '&amount='.$amount .
                 '&currency='.$currency .
                 '&merchantTransactionId='.$passport->id .
@@ -218,6 +218,7 @@ class HomeController extends Controller
         
         $response = json_decode($responseData);
         if (isset($response->id)) {
+            // logger($responseData);
             return view('payment', [
                 'checkoutId' => $response->id, 
                 'currency' => env('CURRENCY'),
@@ -233,7 +234,7 @@ class HomeController extends Controller
             }
         }
 
-        if (starts_with($responseData, '<!DOCTYPE HTML PUBLIC')) {
+        if (starts_with($responseData, '<!DOCTYPE HTML PUBLIC')) {            
             return $responseData;
         }
 
@@ -246,12 +247,12 @@ class HomeController extends Controller
         $entityId = '8ac9a4ca6561110c01657c8adde4629e';
         $userId = '8ac9a4ca6561110c01657c8a9c8b629a';
         $password = 'qfERPN7gAA';
-        // $successValue = '000.000.000';
+        $successValue = '000.000.000';
         $order = null;
 
         $debug = env('APP_DEBUG');
         if ($debug) {
-            // $successValue = '000.100.110';
+            $successValue = '000.100.112';
             $url = 'https://test.oppwa.com'.$request->resourcePath.'?authentication.entityId=8a8294174d0595bb014d05d82e5b01d2';
         } else {
             $url = 'https://oppwa.com'.$request->resourcePath;
@@ -280,7 +281,7 @@ class HomeController extends Controller
             logger($responseData);
         }
 
-        if (starts_with($response->result->code, '000.')) {
+        if ($response->result->code == $successValue) {
             DB::beginTransaction();
 
             $subtotal = $passport->cart->sum('price');
@@ -340,14 +341,28 @@ class HomeController extends Controller
 
             $passport->cart()->delete();
 
-            Mail::to($passport)->send(new OrderPlaced($order));
-
             DB::commit();
+
+            Mail::to($passport)->send(new OrderPlaced($order));
+        } else {
+            Payment::create([
+                'passport_id' => $passport->id,
+                'amount' => $response->amount,
+                'online' => true,
+                'card_type' => $response->paymentBrand,
+                'card_holder' => $response->card->holder,
+                'card_expiration' => sprintf('%s-%s', $response->card->expiryMonth, $response->card->expiryYear),
+                'card_last_4' => $response->card->last4Digits,
+                'currency' => $response->currency,
+                'payment_result_id' => $response->id,
+                'payment_result_code' => $response->result->code,
+                'payment_result_description' => $response->result->description,
+            ]);
         }
         
         return view('receipt', [
             'order' => $order,
-            // 'success_value' => $successValue,
+            'success_value' => $successValue,
             'code' => $response->result->code,
             'description' => $response->result->description,
         ]);
