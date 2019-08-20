@@ -9,6 +9,7 @@ class HotelBooking extends Model
     protected $fillable = [
         'days',
         'price',
+        'room_id',
     ];
 
     protected $casts = [
@@ -21,5 +22,9 @@ class HotelBooking extends Model
 
     public function passport() {
         return $this->belongsTo(Passport::class);
+    }
+
+    public function room() {
+        return $this->belongsTo(Room::class);
     }
 }

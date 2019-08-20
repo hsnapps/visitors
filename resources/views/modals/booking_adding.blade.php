@@ -7,11 +7,14 @@
                     <div class="row">
                         <form action="{{ route('add-course-to-cart') }}" method="POST">
                             <label for="course-category">Choose Booking Package</label>
+                            <div class="alert alert-danger" role="alert">
+                                <strong class="text-uppercase text-danger">{{ sprintf('available rooms: %d', $availableRooms) }}</strong>
+                            </div>
                             <div class="form-row">
                                 @foreach ($bookings_list as $booking)
                                 <div class="form-group col-md-3">
                                     <div class="custom-control custom-checkbox">
-                                        <input name="bookings[]" type="radio" class="custom-control-input" value="{{ $booking->id }}">
+                                        <input {{ $availableRooms == 0 ? 'disabled' : '' }} name="bookings[]" type="radio" class="custom-control-input" value="{{ $booking->id }}">
                                         <label class="custom-control-label" for="customCheck1">{{ sprintf('%d Days', $booking->days) }} <span class="price">{{ sprintf('%s %.2f', env('CURRENCY'), $booking->price / env('CURRENCY_RATE')) }}</span></label>
                                     </div>
                                 </div>

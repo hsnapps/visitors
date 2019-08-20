@@ -17,24 +17,17 @@ use App\Order;
 use App\OrderItem;
 use App\Mail\OrderPlaced;
 use App\HotelBooking;
+use App\Room;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    const CATEGORY = 1;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $user = auth()->user();
@@ -42,7 +35,7 @@ class HomeController extends Controller
         $coursesList = $user->category->courses()->whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
         $wetlabsList = $user->category->wetLabs()->whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
-        $bookingList = HotelBooking::all();
+        $bookingList = HotelBooking::where('room_id', self::CATEGORY)->get();
 
         return view('index', [
             'user' => $user,
@@ -55,6 +48,7 @@ class HomeController extends Controller
             'bookings_list' => $bookingList,
 
             'cart_count' => $user->cart()->count(),
+            'availableRooms' => Room::find(self::CATEGORY)->count,
             // 'avatar' => $user->getAvatar(),
         ]);
     }
@@ -183,11 +177,13 @@ class HomeController extends Controller
         $debug = env('APP_DEBUG');
         if ($debug) {
             $url = "https://test.oppwa.com/v1/checkouts";
+            $data = "entityId=8a8294174d0595bb014d05d82e5b01d2".
+                    "&amount=$request->amount".
+                    "&currency=EUR".
+                    "&paymentType=DB";
         } else {
             $url = 'https://oppwa.com/v1/checkouts';
-        }
-
-        $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
+            $data = 'authentication.userId=8ac9a4ca6561110c01657c8a9c8b629a' .
                 '&authentication.password=qfERPN7gAA' . 
                 '&authentication.entityId=8ac9a4ca6561110c01657c8adde4629e' . 
                 '&amount='.$amount .
@@ -201,6 +197,7 @@ class HomeController extends Controller
                 '&billing.country='.$passport->country .
                 '&billing.city='.$passport->country .
                 '&billing.street1='.$passport->country;
+        }
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -249,21 +246,22 @@ class HomeController extends Controller
     public function paymentStatus(Request $request)
     {
         $passport = $request->user();
-        $entityId = env('HYPERPAY_ENTITY_ID');
-        $userId = env('HYPERPAY_USER_ID');
-        $password = env('qfERPN7gAA');
+        // $entityId = env('HYPERPAY_ENTITY_ID');
+        // $userId = env('HYPERPAY_USER_ID');
+        // $password = env('qfERPN7gAA');
         $successValue = '000.000.000';
         $pattern = env('MATCH');
         $order = null;
         $ssl = !env('APP_DEBUG');
-        $checkoutId = $request->id;
+        // $checkoutId = $request->id;
 
         // dd($request->all());
 
         $debug = env('APP_DEBUG');
         if ($debug) {
             // $successValue = '000.100.112';
-            $url = 'https://test.oppwa.com/'.$request->resourcePath;
+            // $url = 'https://test.oppwa.com/'.$request->resourcePath;
+            $url = 'https://test.oppwa.com'.$request->resourcePath.'?authentication.entityId=8a8294174d0595bb014d05d82e5b01d2';
         } else {
             $url = 'https://oppwa.com/'.$request->resourcePath;
         }
@@ -343,6 +341,10 @@ class HomeController extends Controller
                 }
 
                 if ($cart->item_type == 'booking') {
+                    $hotelBooking = HotelBooking::find($cart->item_id);
+                    $room = Room::find($hotelBooking->room_id);
+                    $room->count -= 1;
+                    $room->save();
                     $passport->hotelBookings()->attach($cart->item_id);
                 }
             }
