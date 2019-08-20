@@ -109,6 +109,16 @@ class HomeController extends Controller
 
         if ($request->item_type == 'booking') {
             foreach ($request->bookings as $item) {
+                $bookingExists = Cart::where([
+                    'passport_id' => $request->user()->id,
+                    'item_type' => $request->item_type,
+                    'item_id' => $item,
+                ])->first();
+
+                if ($bookingExists) {
+                    return back()->with('status', 'You\'ve already added a booking in the cart!');
+                }
+
                 $booking = HotelBooking::findOrFail($item);
                 Cart::create([
                     'passport_id' => $request->user()->id,
@@ -126,6 +136,15 @@ class HomeController extends Controller
         }
 
         foreach ($request->courses as $item) {
+            $courseExists = Cart::where([
+                'passport_id' => $request->user()->id,
+                'item_type' => $request->item_type,
+                'item_id' => $item,
+            ])->first();
+            if ($courseExists) {
+                continue;
+            }
+
             if ($request->item_type == 'courses') {
                 $course = Course::findOrFail($item);
                 Cart::create([

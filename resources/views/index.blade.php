@@ -106,7 +106,7 @@
                         <th>
                             <h2>My Bookings</h2>
                         </th>
-                        <th><a href="" data-toggle="modal" data-target="#booking-adding-modal" class=" btn-primary">Add</a></th>
+                        <th><a data-toggle="modal" data-target="#booking-adding-modal" class="btn-primary {{ $bookings->count() > 0 ? 'hidden' : '' }}">Add</a></th>
                     </tr>
                     @each('components.bookings_list', $bookings, 'b', 'components.bookings_empty')
                 </tbody>
