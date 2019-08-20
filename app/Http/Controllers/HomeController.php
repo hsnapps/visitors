@@ -31,6 +31,12 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user();
+
+        // Check cart date validty
+        // -------------------------------
+        $this->deleteExpiredItems($user);
+        // -------------------------------
+
         $courses_ids = $user->courses()->get()->map(function ($item) { return $item->id; })->toArray();
         $coursesList = $user->category->courses()->whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
@@ -408,5 +414,18 @@ class HomeController extends Controller
     {
         $passport = auth()->user();
         return view('orders', ['orders' => $passport->orders()->paginate(env('PAGE'))]);
+    }
+
+    private function deleteExpiredItems($user)
+    {
+        $deleteItems = array();
+        foreach ($user->cart as $cart) {
+            $hours = today()->diffInHours($cart->created_at);
+            $expired = $hours > env('EXPIRATION_HOURS');
+            if ($expired) {
+                array_push($deleteItems, $cart->id);
+            }
+        }
+        Cart::destroy($deleteItems);
     }
 }

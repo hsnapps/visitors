@@ -12,6 +12,19 @@
 @endpush
  
 @section('content')
+
+@php
+    $deleteItems = array();
+    foreach (auth()->user()->cart as $cart) {
+        $hours = today()->diffInHours($cart->created_at);
+        $expired = $hours > env('EXPIRATION_HOURS');
+        if ($expired) {
+            array_push($deleteItems, $cart->id);
+        }
+    }
+    \App\Cart::destroy($deleteItems);
+@endphp
+
 <h1>CART</h1>
 @if (auth()->user()->cart->count() > 0)
     <table class="uk-table uk-table-hover">
