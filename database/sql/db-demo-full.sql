@@ -34,13 +34,14 @@ CREATE TABLE IF NOT EXISTS `carts` (
   PRIMARY KEY (`id`),
   KEY `carts_passport_id_foreign` (`passport_id`),
   CONSTRAINT `carts_passport_id_foreign` FOREIGN KEY (`passport_id`) REFERENCES `passports` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table eosksaco_visitors.carts: ~2 rows (approximately)
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
 INSERT INTO `carts` (`id`, `passport_id`, `item_type`, `item_id`, `title`, `starts_on`, `price`, `days`, `expiration_date`, `checkout_id`, `created_at`, `updated_at`) VALUES
-	(30, 4, 'wetlabs', 4, 'WetLab D', '2019-09-03', 1000.00, 5, '2019-08-21', NULL, '2019-08-19 16:17:58', '2019-08-19 16:17:58'),
-	(31, 4, 'wetlabs', 7, 'WetLab G', '2019-12-30', 1000.00, 1, '2019-08-21', NULL, '2019-08-19 16:17:58', '2019-08-19 16:17:58');
+	(38, 1, 'wetlabs', 361, 'WetLab A - Session 1', '2020-01-12', 1000.00, 1, '2019-10-28', NULL, '2019-10-26 22:25:23', '2019-10-26 22:25:23'),
+	(39, 1, 'wetlabs', 370, 'WetLab B - Session 5', '2019-11-30', 1000.00, 1, '2019-10-28', NULL, '2019-10-26 22:25:23', '2019-10-26 22:25:23'),
+	(40, 1, 'wetlabs', 382, 'WetLab E - Session 2', '2020-02-10', 1000.00, 1, '2019-10-28', NULL, '2019-10-26 22:25:23', '2019-10-26 22:25:23');
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 
 -- Dumping structure for table eosksaco_visitors.categories
@@ -134,14 +135,14 @@ CREATE TABLE IF NOT EXISTS `courses` (
 -- Dumping data for table eosksaco_visitors.courses: ~8 rows (approximately)
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
 INSERT INTO `courses` (`id`, `name`, `seats`, `starts_on`, `days`, `price`, `deleted_at`, `created_at`, `updated_at`) VALUES
-	(1, 'Course A', 1442, '2019-11-24', 3, 1.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:57'),
-	(2, 'Course B', 551, '2020-11-04', 3, 2.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:57'),
-	(3, 'Course C', 828, '2018-01-10', 1, 3.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:57'),
+	(1, 'Course A', 1442, '2020-12-24', 3, 1.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:57'),
+	(2, 'Course B', 551, '2020-07-04', 3, 2.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:57'),
+	(3, 'Course C', 828, '2020-01-10', 1, 3.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:57'),
 	(4, 'Course D', 506, '2020-04-21', 2, 4.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:57'),
-	(5, 'Course E', 1012, '2019-09-22', 2, 5.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
+	(5, 'Course E', 1012, '2020-09-22', 2, 5.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
 	(6, 'Course F', 717, '2020-05-30', 2, 1.00, NULL, '2019-07-29 12:25:32', '2019-08-18 20:45:54'),
-	(7, 'Course G', 1977, '2019-08-22', 4, 1.00, NULL, '2019-07-29 12:25:32', '2019-08-18 17:16:00'),
-	(8, 'Course H', 1560, '2019-07-30', 5, 7.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58');
+	(7, 'Course G', 1977, '2020-08-22', 4, 1.00, NULL, '2019-07-29 12:25:32', '2019-08-18 17:16:00'),
+	(8, 'Course H', 1560, '2020-07-30', 5, 7.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 
 -- Dumping structure for table eosksaco_visitors.course_passport
@@ -220,9 +221,9 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table eosksaco_visitors.migrations: ~27 rows (approximately)
+-- Dumping data for table eosksaco_visitors.migrations: ~34 rows (approximately)
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2019_04_12_091042_create_passports_table', 1),
@@ -253,7 +254,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(29, '2019_07_30_061830_create_categories_table', 5),
 	(30, '2019_07_30_064528_add_avater_to_passport', 6),
 	(31, '2019_08_20_160055_create_rooms_table', 7),
-	(32, '2019_08_20_161619_add_room_category_to_hotel_bookings', 7);
+	(32, '2019_08_20_161619_add_room_category_to_hotel_bookings', 7),
+	(33, '2019_10_26_181138_create_sessions_table', 8),
+	(34, '2019_10_26_192350_add_session_price', 9),
+	(35, '2019_10_26_192634_drop_cols_from_wetlabs', 9),
+	(36, '2019_10_26_204947_change_cols_in_sessions', 10),
+	(39, '2019_10_26_210551_add_session_name', 11);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
 -- Dumping structure for table eosksaco_visitors.orders
@@ -274,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `orders_payment_id_foreign` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table eosksaco_visitors.orders: ~8 rows (approximately)
+-- Dumping data for table eosksaco_visitors.orders: ~9 rows (approximately)
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
 INSERT INTO `orders` (`id`, `passport_id`, `payment_id`, `subtotal`, `vat`, `amount`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 3, 1, 1000.00, 50.00, 1050.00, 1, '2019-07-30 14:28:37', '2019-07-30 14:28:37'),
@@ -303,7 +309,7 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table eosksaco_visitors.order_items: ~9 rows (approximately)
+-- Dumping data for table eosksaco_visitors.order_items: ~10 rows (approximately)
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
 INSERT INTO `order_items` (`id`, `order_id`, `item_type`, `item_name`, `item_id`, `item_price`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'courses', 'Course F', 6, 1000.00, '2019-07-30 14:28:37', '2019-07-30 14:28:37'),
@@ -358,7 +364,7 @@ CREATE TABLE IF NOT EXISTS `passports` (
 -- Dumping data for table eosksaco_visitors.passports: ~5 rows (approximately)
 /*!40000 ALTER TABLE `passports` DISABLE KEYS */;
 INSERT INTO `passports` (`id`, `event_id`, `admin_id`, `category_id`, `first_name`, `middle_name`, `last_name`, `work_place`, `country`, `bar_code`, `code`, `amount`, `mobile_no`, `profession`, `specialist`, `sfch_number`, `sfch_image`, `bank_recipt`, `email`, `expire_date`, `approved`, `payment`, `conference_reg`, `wet_lab_reg`, `type_of_payment`, `status`, `password`, `remember_token`, `created_at`, `updated_at`, `avatar`) VALUES
-	(1, 1, 1, 1, 'Hassan', NULL, 'Baabdullah', 'KFAFAH', 'SA', NULL, NULL, NULL, '966569163852', 'BCS, PMP', NULL, NULL, NULL, NULL, 'prog.hasan@gmail.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$EDug9wKHFjQhRp.i9wwcr.X/uTwgg6hajzTuF8N3nU2AtafA/u072', '7OXcINRKYjtQ57Sx5bSPzu9W47n8m5CS9bfJEougJNRVgwkQpnLv2adsu8Rt', '2019-07-29 12:25:32', '2019-08-20 19:10:14', '5jc7ILOyqnLsL4KHOY8q'),
+	(1, 1, 1, 1, 'Hassan', NULL, 'Baabdullah', 'KFAFAH', 'SA', NULL, NULL, NULL, '966569163852', 'BCS, PMP', NULL, NULL, NULL, NULL, 'prog.hasan@gmail.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$EDug9wKHFjQhRp.i9wwcr.X/uTwgg6hajzTuF8N3nU2AtafA/u072', '7OXcINRKYjtQ57Sx5bSPzu9W47n8m5CS9bfJEougJNRVgwkQpnLv2adsu8Rt', '2019-07-29 12:25:32', '2019-10-26 21:28:42', 'StvXi94La1FnLhnk1QkA'),
 	(2, 1, 1, 2, 'Alf', NULL, 'Rutherford', 'Shields, Nikolaus and Terry', 'SA', NULL, NULL, NULL, '+1-598-567-1047', 'culpa qui', NULL, NULL, NULL, NULL, 'little.aileen@yahoo.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$c9dr9XtS/mhePwtkwZR1reyeUJo516OU2YvlWaaOffd0rt257D1WS', '6AZ05URTvj47VXAfOFAB0AgHP1EZ68rTfwSHKIDd9dqzwr6I1ywluLCevxkB', '2019-07-29 12:25:32', '2019-07-30 14:05:03', 'eejm1BbwFmUXQ1l1cDNN'),
 	(3, 1, 1, 3, 'Mac', NULL, 'McKenzie', 'O\'Conner, Graham and Maggio', 'SA', NULL, NULL, NULL, '1-645-534-9148 x32285', 'voluptas soluta', NULL, NULL, NULL, NULL, 'jamal.swe1987@gmail.com', NULL, 0, 0, NULL, NULL, NULL, NULL, '$2y$10$FSqFe.cvrQS24sSRb8k6l.RPJB7dRH/WltsCJsAx8RWlY59LPm/r2', 'edJngDI5mr2xsoZr80V5TOJqPIQsGURqZD322Gr3DGzczbIZIUxkMtzxv6iK', '2019-07-29 12:25:32', '2019-07-31 13:07:44', 'cY6TMIb7Rr7anQCatTRY'),
 	(4, 1, 1, 3, 'Salem', NULL, 'Aljohari', 'LivePresentation', 'SA', '', '', '', '22222222222', 'Manager', '', '', '', '', 'salem@livepresentation.net', '', 0, 0, '', '', '', '', '$2y$10$FSqFe.cvrQS24sSRb8k6l.RPJB7dRH/WltsCJsAx8RWlY59LPm/r2', 'OVc9JX07F5FWV1y5lVJzlKos11v5hpHyd1tGg1Cq5jfaPEgdTUQuLWXEiIM9', '2019-07-29 12:25:32', '2019-08-18 16:19:32', 'ikC8zxIXYNFld9GIb0Ch'),
@@ -383,6 +389,7 @@ INSERT INTO `passport_titles` (`id`, `name`) VALUES
 -- Dumping structure for table eosksaco_visitors.passport_wetlab
 CREATE TABLE IF NOT EXISTS `passport_wetlab` (
   `wetlab_id` int(10) unsigned NOT NULL,
+  `session_id` bigint(20) unsigned DEFAULT NULL,
   `passport_id` int(10) unsigned NOT NULL,
   `paid` tinyint(1) NOT NULL DEFAULT '0',
   `cancelled_by_visitor` tinyint(1) NOT NULL DEFAULT '0',
@@ -390,16 +397,18 @@ CREATE TABLE IF NOT EXISTS `passport_wetlab` (
   `attended` tinyint(1) NOT NULL DEFAULT '0',
   KEY `passport_wetlab_wetlab_id_foreign` (`wetlab_id`),
   KEY `passport_wetlab_passport_id_foreign` (`passport_id`),
+  KEY `passport_wetlab_session_id_foreign` (`session_id`),
   CONSTRAINT `passport_wetlab_passport_id_foreign` FOREIGN KEY (`passport_id`) REFERENCES `passports` (`id`),
+  CONSTRAINT `passport_wetlab_session_id_foreign` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`),
   CONSTRAINT `passport_wetlab_wetlab_id_foreign` FOREIGN KEY (`wetlab_id`) REFERENCES `wet_labs` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table eosksaco_visitors.passport_wetlab: ~3 rows (approximately)
 /*!40000 ALTER TABLE `passport_wetlab` DISABLE KEYS */;
-INSERT INTO `passport_wetlab` (`wetlab_id`, `passport_id`, `paid`, `cancelled_by_visitor`, `cancelled_by_provider`, `attended`) VALUES
-	(7, 3, 0, 0, 0, 0),
-	(3, 3, 0, 0, 0, 0),
-	(5, 3, 0, 0, 0, 0);
+INSERT INTO `passport_wetlab` (`wetlab_id`, `session_id`, `passport_id`, `paid`, `cancelled_by_visitor`, `cancelled_by_provider`, `attended`) VALUES
+	(7, NULL, 3, 0, 0, 0, 0),
+	(3, NULL, 3, 0, 0, 0, 0),
+	(5, NULL, 3, 0, 0, 0, 0);
 /*!40000 ALTER TABLE `passport_wetlab` ENABLE KEYS */;
 
 -- Dumping structure for table eosksaco_visitors.payments
@@ -453,14 +462,74 @@ INSERT INTO `rooms` (`id`, `category`, `count`) VALUES
 	(1, 'STANDARD', 99);
 /*!40000 ALTER TABLE `rooms` ENABLE KEYS */;
 
+-- Dumping structure for table eosksaco_visitors.sessions
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'SESSION',
+  `wetlab_id` int(10) unsigned NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `seats_available` smallint(6) NOT NULL DEFAULT '1',
+  `seats_taken` smallint(6) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `price` decimal(8,2) NOT NULL DEFAULT '1000.00',
+  `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sessions_wetlab_id_foreign` (`wetlab_id`),
+  CONSTRAINT `sessions_wetlab_id_foreign` FOREIGN KEY (`wetlab_id`) REFERENCES `wet_labs` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table eosksaco_visitors.sessions: ~40 rows (approximately)
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+INSERT INTO `sessions` (`id`, `name`, `wetlab_id`, `start_time`, `end_time`, `seats_available`, `seats_taken`, `created_at`, `updated_at`, `price`, `description`) VALUES
+	(361, 'Session 1', 1, '09:00:00', '10:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(362, 'Session 2', 1, '10:00:00', '11:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(363, 'Session 3', 1, '11:00:00', '12:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(364, 'Session 4', 1, '12:00:00', '13:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(365, 'Session 5', 1, '13:00:00', '14:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(366, 'Session 1', 2, '09:00:00', '10:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(367, 'Session 2', 2, '10:00:00', '11:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(368, 'Session 3', 2, '11:00:00', '12:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(369, 'Session 4', 2, '12:00:00', '13:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(370, 'Session 5', 2, '13:00:00', '14:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(371, 'Session 1', 3, '09:00:00', '10:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(372, 'Session 2', 3, '10:00:00', '11:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(373, 'Session 3', 3, '11:00:00', '12:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(374, 'Session 4', 3, '12:00:00', '13:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(375, 'Session 5', 3, '13:00:00', '14:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(376, 'Session 1', 4, '09:00:00', '10:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(377, 'Session 2', 4, '10:00:00', '11:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(378, 'Session 3', 4, '11:00:00', '12:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(379, 'Session 4', 4, '12:00:00', '13:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(380, 'Session 5', 4, '13:00:00', '14:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(381, 'Session 1', 5, '09:00:00', '10:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(382, 'Session 2', 5, '10:00:00', '11:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(383, 'Session 3', 5, '11:00:00', '12:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(384, 'Session 4', 5, '12:00:00', '13:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(385, 'Session 5', 5, '13:00:00', '14:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(386, 'Session 1', 6, '09:00:00', '10:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(387, 'Session 2', 6, '10:00:00', '11:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(388, 'Session 3', 6, '11:00:00', '12:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(389, 'Session 4', 6, '12:00:00', '13:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(390, 'Session 5', 6, '13:00:00', '14:00:00', 4, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(391, 'Session 1', 7, '09:00:00', '10:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(392, 'Session 2', 7, '10:00:00', '11:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(393, 'Session 3', 7, '11:00:00', '12:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(394, 'Session 4', 7, '12:00:00', '13:00:00', 3, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(395, 'Session 5', 7, '13:00:00', '14:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(396, 'Session 1', 8, '09:00:00', '10:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(397, 'Session 2', 8, '10:00:00', '11:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(398, 'Session 3', 8, '11:00:00', '12:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(399, 'Session 4', 8, '12:00:00', '13:00:00', 2, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL),
+	(400, 'Session 5', 8, '13:00:00', '14:00:00', 1, 0, '2019-10-26 21:09:04', '2019-10-26 21:09:04', 1000.00, NULL);
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
+
 -- Dumping structure for table eosksaco_visitors.wet_labs
 CREATE TABLE IF NOT EXISTS `wet_labs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `seats` int(11) NOT NULL DEFAULT '50',
   `starts_on` date NOT NULL,
-  `days` int(11) NOT NULL DEFAULT '1' COMMENT 'Course duration in days',
-  `price` decimal(8,2) NOT NULL DEFAULT '1000.00',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -470,15 +539,15 @@ CREATE TABLE IF NOT EXISTS `wet_labs` (
 
 -- Dumping data for table eosksaco_visitors.wet_labs: ~8 rows (approximately)
 /*!40000 ALTER TABLE `wet_labs` DISABLE KEYS */;
-INSERT INTO `wet_labs` (`id`, `name`, `seats`, `starts_on`, `days`, `price`, `deleted_at`, `created_at`, `updated_at`) VALUES
-	(1, 'WetLab A', 1166, '2020-01-12', 5, 1000.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
-	(2, 'WetLab B', 572, '2019-11-30', 1, 1000.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
-	(3, 'WetLab C', 1202, '2020-11-02', 5, 1000.00, NULL, '2019-07-29 12:25:32', '2019-07-31 13:10:11'),
-	(4, 'WetLab D', 1180, '2019-09-03', 5, 1000.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
-	(5, 'WetLab E', 400, '2020-02-10', 5, 1000.00, NULL, '2019-07-29 12:25:32', '2019-07-31 13:10:11'),
-	(6, 'WetLab F', 662, '2019-08-18', 5, 1000.00, NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
-	(7, 'WetLab G', 271, '2019-12-30', 1, 1000.00, NULL, '2019-07-29 12:25:32', '2019-07-30 14:29:38'),
-	(8, 'WetLab H', 565, '2019-08-14', 4, 1000.00, NULL, '2019-07-29 12:25:33', '2019-07-29 15:10:58');
+INSERT INTO `wet_labs` (`id`, `name`, `starts_on`, `deleted_at`, `created_at`, `updated_at`) VALUES
+	(1, 'WetLab A', '2020-01-12', NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
+	(2, 'WetLab B', '2019-11-30', NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
+	(3, 'WetLab C', '2020-11-02', NULL, '2019-07-29 12:25:32', '2019-07-31 13:10:11'),
+	(4, 'WetLab D', '2019-09-03', NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
+	(5, 'WetLab E', '2020-02-10', NULL, '2019-07-29 12:25:32', '2019-07-31 13:10:11'),
+	(6, 'WetLab F', '2019-08-18', NULL, '2019-07-29 12:25:32', '2019-07-29 15:10:58'),
+	(7, 'WetLab G', '2019-12-30', NULL, '2019-07-29 12:25:32', '2019-07-30 14:29:38'),
+	(8, 'WetLab H', '2019-08-14', NULL, '2019-07-29 12:25:33', '2019-07-29 15:10:58');
 /*!40000 ALTER TABLE `wet_labs` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
