@@ -6,22 +6,34 @@
             <div class="modal-body">
                 <div class="row">
                     <form action="{{ route('add-course-to-cart') }}" method="POST">
-                        <div class="form-row">
-                            <label for="course-category">Choose Wetlab Category</label>
-                            <div class="form-group col-md-12">
-                                @foreach ($wetlabs_list as $wetlab)
-                                <div class="form-group col-md-6">
-                                    <div class="custom-control custom-checkbox">
-                                        <input name="courses[]" type="checkbox" class="custom-control-input" value="{{ $wetlab->id }}">
-                                        <label class="custom-control-label" for="customCheck1">{{ $wetlab->name }} <span class="price">{{ sprintf('%s %.2f', env('CURRENCY'), $wetlab->price / env('CURRENCY_RATE')) }}</span></label>
-                                    </div>
-                                    <small id="passwordHelpBlock" class="form-text text-muted text-uppercase">
-                                        {{ sprintf('Starts on %s. available seats %d', $wetlab->starts_on->format('F j, Y'), $wetlab->seats) }}
-                                    </small>
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            @foreach ($wetlabs_list as $wetlab)
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                  <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#wetlab-{{ $wetlab->id }}" aria-expanded="true" aria-controls="collapseOne">
+                                      <label class="custom-control-label" for="customCheck1">{{ $wetlab->name }} <span class="price">{{ sprintf('Starts on %s', $wetlab->starts_on->format('F j, Y')) }}</span></label>
+                                    </a>
+                                  </h4>
                                 </div>
-                                @endforeach
-                            </div>
-                        </div>
+                                <div id="wetlab-{{ $wetlab->id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                  <div class="panel-body">
+                                    <ul class="wetlab-session">
+                                        @foreach ($wetlab->sessions as $s)
+                                        @php
+                                            $available = $s->seats_available - $s->seats_taken;
+                                        @endphp
+                                        <div class="custom-control custom-radio">
+                                            <input {{ $available == 0 ? 'disabled' : '' }} name="session[]" type="radio" class="custom-control-input" value="{{ $s->id }}">
+                                            <span class="price">{{ sprintf('%s - Starts on %s - Available Seats %d', $s->name, $s->start_time, $available) }}</span>
+                                        </div>
+                                        @endforeach
+                                    </ul>                                    
+                                  </div>
+                                </div>
+                              </div>
+                            @endforeach
+                          </div>
                         <div class="form-row col-md-12">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>

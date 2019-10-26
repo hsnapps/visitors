@@ -11,10 +11,10 @@ class WetLab extends Model
 
     protected $fillable = [
         'name',
-        'seats',
+        // 'seats',
         'starts_on',
-        'days',
-        'price',
+        // 'days',
+        // 'price',
     ];
 
     protected $dates = [
@@ -33,6 +33,6 @@ class WetLab extends Model
 
     public function sessions()
     {
-        return $this->hasMany(Session::class);
+        return $this->hasMany(Session::class, 'wetlab_id', 'id');
     }
 }

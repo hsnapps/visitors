@@ -10,11 +10,12 @@ class Session extends Model
         'wetlab_id',
         'start_time',
         'end_time',
-        'seats'
+        'seats_available',
+        'seats_taken',
     ];
 
     public function wetlab()
     {
-        return $this->belongsTo(WetLab::class);
+        return $this->belongsTo(WetLab::class, 'wetlab_id', 'id');
     }
 }
