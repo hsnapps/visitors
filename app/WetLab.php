@@ -8,19 +8,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class WetLab extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
-    'name',
-    'seats',
-    'starts_on',
-    'days',
-    'price',
+        'name',
+        'seats',
+        'starts_on',
+        'days',
+        'price',
     ];
-     
+
     protected $dates = [
         'starts_on',
     ];
-    
+
     public function visitors()
     {
         return $this->belongsToMany(Passport::class, 'passport_wetlab', 'wetlab_id', 'passport_id');
@@ -29,5 +29,10 @@ class WetLab extends Model
     public function categories()
     {
         return $this->belongsToMany(PassportTitle::class, 'category_wet_lab', 'wet_lab_id', 'category_id');
+    }
+
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
     }
 }
