@@ -24,7 +24,7 @@
                                             $available = $s->seats_available - $s->seats_taken;
                                         @endphp
                                         <div class="custom-control custom-radio">
-                                            <input {{ $available == 0 ? 'disabled' : '' }} name="session[]" type="radio" class="custom-control-input" value="{{ $s->id }}">
+                                            <input {{ $available == 0 ? 'disabled' : '' }} name="{{ sprintf('courses[%d][]', $s->id) }}" type="radio" class="custom-control-input" value="{{ $s->id }}">
                                             <span class="price">{{ sprintf('%s - Starts on %s - Available Seats %d', $s->name, $s->start_time, $available) }}</span>
                                         </div>
                                         @endforeach

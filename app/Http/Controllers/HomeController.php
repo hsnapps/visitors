@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use App\Code\Tools;
 use App\Course;
 use App\WetLab;
@@ -18,6 +19,7 @@ use App\OrderItem;
 use App\Mail\OrderPlaced;
 use App\HotelBooking;
 use App\Room;
+use App\Session;
 
 class HomeController extends Controller
 {
@@ -111,7 +113,7 @@ class HomeController extends Controller
 
     public function addCourseToCart(Request $request)
     {
-        // dd($request->all());
+        // dd($request->except(['_token']));
 
         if ($request->item_type == 'booking') {
             foreach ($request->bookings as $item) {
@@ -166,16 +168,28 @@ class HomeController extends Controller
             }
             
             if ($request->item_type == 'wetlabs') {
-                $wetlab = WetLab::findOrFail($item);
+                $session = Session::findOrFail($item[0]);
+                $year = $session->wetlab->starts_on->year;
+                $month = $session->wetlab->starts_on->month;
+                $day = $session->wetlab->starts_on->day;                
+                $start_time = explode(':', $session->start_time);
+                $end_time = explode(':', $session->end_time);
+                $hour = $start_time[0];
+                $minute = $start_time[1];
+                $starts_on = Carbon::create($year, $month, $day, $hour, $minute, 00);
+                $hour = $end_time[0];
+                $minute = $end_time[1];
+                $ends_on = Carbon::create($year, $month, $day, $hour, $minute, 00);
+                $duration = $ends_on->subHours($starts_on->hour)->hour;
                 Cart::create([
                     'passport_id' => $request->user()->id,
                     'item_type' => $request->item_type,
-                    'item_id' => $wetlab->id,
+                    'item_id' => $session->id,
                     'expiration_date' => today()->addHours(env('EXPIRATION_DATE', 48)),
-                    'title' => $wetlab->name,
-                    'starts_on' => $wetlab->starts_on,
-                    'price' => $wetlab->price,
-                    'days' => $wetlab->days,
+                    'title' => sprintf('%s - %s', $session->wetlab->name, $session->name),
+                    'starts_on' => $starts_on,
+                    'price' => $session->price,
+                    'days' => $duration,
                 ]);
             }
         }

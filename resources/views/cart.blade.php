@@ -34,7 +34,7 @@
                 <th>Item Type</th>
                 <th>Item Name</th>
                 <th>Starts On</th>
-                <th>Duration <small>(Days)</small></th>
+                <th>Duration</th>
                 <th>Price</th>
                 <th></th>
             </tr>
@@ -53,7 +53,7 @@
                 <td>{{ $item_type }}</td>
                 <td>{{ $item->title }}</td>
                 <td>{{ isset($item->starts_on) ? $item->starts_on->format('d/m/Y') : 'N/A' }}</td>
-                <td>{{ $item->days }}</td>
+                <td>{{ $item->days }} <small>{{ $item->item_type == 'wetlabs' ? '(hours)' : '(days)' }}</small></td>
                 <td>{{ sprintf('%s %.2f', env('CURRENCY'), $item->price / env('CURRENCY_RATE')) }}</td>
                 <td>
                     <button class="uk-button uk-button-small uk-button-danger" type="button" onclick="document.getElementById('remove_{{ $item->id }}').submit();">
