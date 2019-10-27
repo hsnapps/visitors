@@ -96,7 +96,7 @@
                         </th>
                         <th><a href="" data-toggle="modal" data-target="#wetlab-adding-modal" class=" btn-primary">Add</a></th>
                     </tr>
-                    @each('components.wetlabs_list', $wetlabs, 'wetlab', 'components.wetlabs_empty')
+                    @each('components.wetlabs_list', $sessions, 'session', 'components.wetlabs_empty')
                 </tbody>
             </table>
 

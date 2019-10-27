@@ -1,4 +1,4 @@
 <tr>
-    <td>{{ $wetlab->name }}</td>
-    <td>{{ $wetlab->starts_on->format('d/m/Y') }}</td>
+    <td>{{ $session->wetlab->name }} <small>{{ $session->name }}</small></td>
+    <td>{{ substr($session->start_time, 0, 5) }}</td>
 </tr>

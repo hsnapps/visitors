@@ -73,7 +73,7 @@
                                             <td>{{ $loop->index + 1 }}</td>
                                             <td>{{ title_case($item->item_type) }}</td>
                                             <td>{{ $item->item_name }}</td>
-                                            <td>SAR {{ $item->item_price }}</td>
+                                            <td>{{ sprintf('%s %s', env('CURRENCY'), $item->item_price) }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -84,17 +84,17 @@
                         <div class="d-flex flex-row-reverse bg-dark text-white p-4">
                             <div class="py-3 px-5 text-right">
                                 <div class="mb-2">Grand Total</div>
-                                <div class="h2 font-weight-light">SAR {{ $order->subtotal }}</div>
+                                <div class="h2 font-weight-light">{{ sprintf('%s %s', env('CURRENCY'), round($order->subtotal, 2)) }}</div>
                             </div>
 
                             <div class="py-3 px-5 text-right">
                                 <div class="mb-2">Vat</div>
-                                <div class="h2 font-weight-light">SAR {{ $order->subtotal * env('VAT') }}</div>
+                                <div class="h2 font-weight-light">{{ sprintf('%s %s', env('CURRENCY'), round($order->subtotal * env('VAT'), 2)) }}</div>
                             </div>
 
                             <div class="py-3 px-5 text-right">
                                 <div class="mb-2">Sub - Total amount</div>
-                                <div class="h2 font-weight-light">SAR {{ $order->amount }}</div>
+                                <div class="h2 font-weight-light">{{ sprintf('%s %s', env('CURRENCY'), round($order->amount * env('CURRENCY_RATE'), 2) ) }}</div>
                             </div>
                         </div>
                     </div>

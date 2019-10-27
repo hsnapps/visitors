@@ -49,6 +49,7 @@ class HomeController extends Controller
             'user' => $user,
             'courses' => $user->courses,
             'wetlabs' => $user->wetlabs,
+            'sessions' => $user->sessions,
             'bookings' => $user->hotelBookings,
 
             'courses_list' => $coursesList,            
@@ -113,8 +114,6 @@ class HomeController extends Controller
 
     public function addCourseToCart(Request $request)
     {
-        // dd($request->except(['_token']));
-
         if ($request->item_type == 'booking') {
             foreach ($request->bookings as $item) {
                 $bookingExists = Cart::where([
@@ -207,9 +206,18 @@ class HomeController extends Controller
     {
         $passport = $request->user();
         $currency = env('CURRENCY');
+        $rate = env('CURRENCY_RATE');
         $_amount = str_replace(',', '', $request->amount);
-        $__amount = $_amount / env('CURRENCY_RATE');
+        $__amount = $_amount / $rate;
+        // dd($__amount);
         $amount = round($__amount, 2);
+        $fractions = explode('.', $amount);
+        if(count($fractions) == 1) {
+            $amount = $amount.'.00';
+        } else if(strlen($fractions[1]) == 1) {
+            $amount = $amount.'0';
+        }
+        // dd($amount);
         $ssl = !env('APP_DEBUG');
 
         // 1. Prepare the checkout
@@ -217,8 +225,8 @@ class HomeController extends Controller
         if ($debug) {
             $url = "https://test.oppwa.com/v1/checkouts";
             $data = "entityId=8a8294174d0595bb014d05d82e5b01d2".
-                    "&amount=$request->amount".
-                    "&currency=EUR".
+                    "&amount=$amount".
+                    '&currency='.$currency .
                     "&paymentType=DB";
         } else {
             $url = 'https://oppwa.com/v1/checkouts';
@@ -372,11 +380,12 @@ class HomeController extends Controller
                 }
 
                 if ($cart->item_type == 'wetlabs') {
-                    $course = WetLab::find($cart->item_id);
-                    $course->seats = $course->seats - 1;
-                    $course->save();
+                    $session = Session::find($cart->item_id);
+                    $session->seats_available = $session->seats_available - 1;
+                    $session->seats_taken = $session->seats_taken + 1;
+                    $session->save();
 
-                    $passport->wetlabs()->attach($cart->item_id);
+                    $passport->wetlabs()->attach($session->wetlab->id, ['session_id' => $session->id]);
                 }
 
                 if ($cart->item_type == 'booking') {

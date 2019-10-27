@@ -71,6 +71,11 @@ class Passport extends Authenticatable
         return $this->belongsToMany(WetLab::class, 'passport_wetlab', 'passport_id', 'wetlab_id');
     }
 
+    public function sessions()
+    {
+        return $this->belongsToMany(Session::class, 'passport_wetlab', 'passport_id', 'session_id');
+    }
+
     public function hotelBookings()
     {
         return $this->belongsToMany(HotelBooking::class);
