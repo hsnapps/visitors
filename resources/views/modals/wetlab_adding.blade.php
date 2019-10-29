@@ -20,12 +20,12 @@
                                   <div class="panel-body">
                                     <ul class="wetlab-session">
                                         @foreach ($wetlab->sessions as $s)
-                                        @php
-                                            $available = $s->seats_available - $s->seats_taken;
-                                        @endphp
+                                          @php
+                                              $available = $s->seats_available - $s->seats_taken;
+                                          @endphp
                                         <div class="custom-control custom-radio">
-                                            <input {{ $available == 0 ? 'disabled' : '' }} name="{{ sprintf('courses[%d][]', $s->id) }}" type="radio" class="custom-control-input" value="{{ $s->id }}">
-                                            <span class="price">{{ sprintf('%s - Starts on %s - Available Seats %d', $s->name, $s->start_time, $available) }}</span>
+                                            <input multiple="false" {{ $available == 0 ? 'disabled' : '' }} name="{{ sprintf('courses[%d][]', $s->wetlab->id) }}" type="radio" class="custom-control-input" value="{{ $s->id }}">
+                                            <span class="price">{{ sprintf('%s - Starts on %s - Available Seats %d', $s->name, substr($s->start_time, 0, 5), $available) }}</span>
                                         </div>
                                         @endforeach
                                     </ul>                                    

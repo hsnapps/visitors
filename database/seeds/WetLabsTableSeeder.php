@@ -18,7 +18,7 @@ class WetLabsTableSeeder extends Seeder
         for ($i=ord('A'); $i < ord('I'); $i++) { 
             WetLab::create([
                 'name' => 'WetLab '.chr($i),
-                'starts_on' => $faker->dateTimeBetween('0 years', 'now', 'Asia/Riyadh'),
+                'starts_on' => $faker->dateTimeBetween('now', '+18 months', 'Asia/Riyadh'),
             ]);
         }
     }

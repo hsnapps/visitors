@@ -19,6 +19,7 @@ use App\OrderItem;
 use App\Mail\OrderPlaced;
 use App\HotelBooking;
 use App\Room;
+use App\Rules\WetLabsRule;
 use App\Session;
 
 class HomeController extends Controller
@@ -42,7 +43,7 @@ class HomeController extends Controller
         $courses_ids = $user->courses()->get()->map(function ($item) { return $item->id; })->toArray();
         $coursesList = $user->category->courses()->whereNotIn('id', $courses_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
-        $wetlabsList = $user->category->wetLabs()->whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
+        $wetlabsList = $user->category->wetLabs()->orderBy('starts_on')->whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $bookingList = HotelBooking::where('room_id', self::CATEGORY)->get();
 
         return view('index', [
@@ -114,6 +115,15 @@ class HomeController extends Controller
 
     public function addCourseToCart(Request $request)
     {
+        // dd($request->courses);
+        
+        // Check if wet-lab session already exists in cart
+        if ($request->item_type == 'wetlabs') {
+            $request->validate([
+                'courses' => [new WetLabsRule],
+            ]);
+        }
+
         if ($request->item_type == 'booking') {
             foreach ($request->bookings as $item) {
                 $bookingExists = Cart::where([
@@ -185,7 +195,7 @@ class HomeController extends Controller
                     'item_type' => $request->item_type,
                     'item_id' => $session->id,
                     'expiration_date' => today()->addHours(env('EXPIRATION_DATE', 48)),
-                    'title' => sprintf('%s - %s', $session->wetlab->name, $session->name),
+                    'title' => sprintf('%s - %s (%s)', $session->wetlab->name, $session->name, $start_time[0].':'.$start_time[1]),
                     'starts_on' => $starts_on,
                     'price' => $session->price,
                     'days' => $duration,
