@@ -44,6 +44,10 @@ class HomeController extends Controller
         $wetlabs_ids = $user->wetlabs()->get()->map(function ($item) { return $item->id; })->toArray();
         $wetlabsList = $user->category->wetLabs()->whereNotIn('id', $wetlabs_ids)->whereDate('starts_on', '>', today()->subDay())->get();
         $bookingList = HotelBooking::where('room_id', self::CATEGORY)->get();
+        $groupedCourses = $coursesList->mapToGroups(function ($item) {
+            return [$item->starts_on->format('Y-m-d') => $item];
+        });
+        // dd($groupedCourses->get('2019-11-20')->get(0)->toArray());
 
         return view('index', [
             'user' => $user,
@@ -58,7 +62,7 @@ class HomeController extends Controller
 
             'cart_count' => $user->cart()->count(),
             'availableRooms' => Room::find(self::CATEGORY)->count,
-            // 'avatar' => $user->getAvatar(),
+            'grouped_courses' => $groupedCourses,
         ]);
     }
 

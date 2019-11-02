@@ -2,7 +2,9 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
 SET time_zone = "+00:00";
 
-USE `original_eosksaco_visitors`;
+USE `eosksaco_visitors`;
+
+DROP TABLE IF EXISTS `sessions`;
 
 CREATE TABLE `sessions` (
 	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,

@@ -1,4 +1,4 @@
-<!-- row modal for add course-->
+<!-- row modal for add wetlab-->
 <div id="course-adding-modal" class="speaker-modal modal fade in">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -6,29 +6,39 @@
             <div class="modal-body">
                 <div class="row">
                     <form action="{{ route('add-course-to-cart') }}" method="POST">
-                        <label for="course-category">Choose Course Category</label>
-                        <div class="form-row">
-                            @foreach ($courses_list as $course)
-                            <div class="form-group col-md-6">
-                                <div class="custom-control custom-checkbox">
-                                    <input name="courses[]" type="checkbox" class="custom-control-input" value="{{ $course->id }}">
-                                    <label class="custom-control-label" for="customCheck1">{{ $course->name }} <span class="price">{{ sprintf('%s %.2f', env('CURRENCY'), $course->price / env('CURRENCY_RATE')) }}</span></label>
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            @foreach ($grouped_courses as $key => $courses)
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                  <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#date-{{ $key }}" aria-expanded="true" aria-controls="collapseOne">
+                                      <label class="custom-control-label">COURSES ON {{ $key }}</label>
+                                    </a>
+                                  </h4>
                                 </div>
-                                <small id="passwordHelpBlock" class="form-text text-muted text-uppercase">
-                                    {{ sprintf('Starts on %s. available seats %d', $course->starts_on->format('F j, Y'), $course->seats) }}
-                                </small>
-                            </div>
+                                <div id="date-{{ $key }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                  <div class="panel-body">
+                                    <ul class="wetlab-session">
+                                        @foreach ($courses as $course)
+                                        <div class="custom-control custom-radio">
+                                            <input {{ $course->seats == 0 ? 'disabled' : '' }} name="course[]" type="checkbox" class="custom-control-input" value="{{ $course->id }}">
+                                            <span class="price">{{ sprintf('%s - Starts at %s - Available Seats %d', $course->name, $course->starts_on->format('H:i'), $course->seats) }}</span>
+                                        </div>
+                                        @endforeach
+                                    </ul>                                    
+                                  </div>
+                                </div>
+                              </div>
                             @endforeach
-                        </div>
+                          </div>
                         <div class="form-row col-md-12">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                         {{ csrf_field() }}
-                        <input type="hidden" name="item_type" value="courses">
+                        <input type="hidden" name="item_type" value="wetlabs">
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- row modal for add course -->
