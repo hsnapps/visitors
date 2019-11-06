@@ -53,6 +53,7 @@
 			@includeWhen(session('success'), 'includes.success')
 			@includeWhen(session('status'), 'includes.status')
 			@includeWhen(session('error'), 'includes.error')
+			@includeWhen(session('errors'), 'includes.errors')
 
 			@yield('content')
 			

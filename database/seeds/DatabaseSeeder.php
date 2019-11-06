@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesTableSeeder::class);
 
         // Seeding Passports
-        $this->call(PassportsTableSeeder::class);      
+        $this->call(PassportsTableSeeder::class);
 
         // Seeding Courses
         $this->call(CoursesTableSeeder::class);
@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
 
         // Generating Sessions
         $this->call(SessionsTableSeeder::class);
+
+        $this->call(CategoriesRelationsshipSeeder::class);
 
         DB::commit();
     }
